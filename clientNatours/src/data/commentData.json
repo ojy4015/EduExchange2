@@ -1,0 +1,65 @@
+[
+  {
+    "id": 1,
+    "userId": "duuu.__.hyeon",
+    "userFeed": "그래도 sass가 나은 편이지 자바스크립트랑 리액트에 비하면 ",
+    "userImg": "https://media.vlpt.us/images/hongduhyeon/post/ebc33b2c-f8c5-4792-9a2f-b1dbc5529372/sass.png?w=768",
+    "isLiked": true,
+    "userComment": [
+      {
+        "id": 1,
+        "userName": "wecode",
+        "content": "Welcome to world best coding bootcamp!",
+        "isCommentLiked": true
+      },
+      {
+        "id": 2,
+        "userName": "jayPark",
+        "content": "Hey.",
+        "isCommentLiked": false
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "userId": "duuu.__.kong",
+    "userFeed": "자바스크립트 진짜 별로야 특히 해달라는 대로 다해줬는데 안들어가는건 무슨 심보니?",
+    "userImg": "https://media.vlpt.us/images/hongduhyeon/post/791da457-a0ee-4bd2-8fd4-7839e678bd86/javascript.png?w=768",
+    "isLiked": false,
+    "userComment": [
+      {
+        "id": 1,
+        "userName": "wecode",
+        "content": "리액트는 지옥이다.",
+        "isCommentLiked": true
+      },
+      {
+        "id": 2,
+        "userName": "HongDuHyeon",
+        "content": "부러질지언정 휘어질 수 없다.",
+        "isCommentLiked": false
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "userId": "duuu.__.kong",
+    "userFeed": "리액트는 할말이 없다. 차라리 날 죽여라 리액트",
+    "userImg": "https://media.vlpt.us/images/hongduhyeon/post/ee1b7bfc-29fc-40cc-8226-52eb4996207b/react.png?w=768",
+    "isLiked": false,
+    "userComment": [
+      {
+        "id": 1,
+        "userName": "wecodeaoisdjo",
+        "content": "3번째 컨텐츠",
+        "isCommentLiked": true
+      },
+      {
+        "id": 2,
+        "userName": "HongDuHyeon",
+        "content": "휘어진 것 같다.",
+        "isCommentLiked": false
+      }
+    ]
+  }
+]
