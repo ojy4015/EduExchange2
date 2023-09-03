@@ -189,6 +189,7 @@ export default function Home() {
   return (
     <div>
       <Jumbotron title="Natours Tours" sutTitle="Welcome to Natours Tours" />
+      <div>Test code for Git hub here</div>
       <div className="container-fluid">
         <div className="row">
           <div className="col-md-6">
