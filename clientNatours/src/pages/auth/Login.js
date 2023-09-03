@@ -112,7 +112,7 @@ export default function Login() {
     <div>
       <Jumbotron title="Login" />
       <pre>{JSON.stringify(auth, null, 4)}</pre>
-      <div>Test code for Git hub here</div>
+      {/* <div>Test code for Git hub here</div> */}
       <div className="container mt-5">
         <div className="row">
           <div className="col-md-6 offset-md-3">

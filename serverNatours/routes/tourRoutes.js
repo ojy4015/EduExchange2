@@ -35,7 +35,10 @@ router.get('/test', (req, res)=> {
    .route('/related-tours/:tourId/:categoryId')
    .get(tourController.relatedTours);
 
- 
+// generate braintree token
+router.get("/braintree/token", tourController.getToken);
+// finalize transaction
+router.post("/braintree/payment", authController.protect, tourController.processPayment);
 
  //////////////////////////////////////////////////////////
 

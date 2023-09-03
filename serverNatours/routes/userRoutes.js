@@ -1,3 +1,4 @@
+//////////////////////////////////////////////////////////////////////////////
 const express = require('express');
 const userController = require('./../controllers/userController');
 const authController = require('./../controllers/authController');
@@ -18,6 +19,7 @@ router.put(
   '/profile',
   authController.updateProfile
 );
+
 
 router.get("/auth-check", (req, res) => {
   res.json({ ok: true });

@@ -2,10 +2,19 @@ const Tour = require('./../models/tourModel');
 const catchAsync = require('./../utils/catchAsync');
 const AppError = require('./../utils/appError');
 const factory = require('./handlerFactory');
+const braintree = require("braintree");
 const fs = require('fs');
 const dotenv = require('dotenv');
+const Order = require('../models/order');
 
 dotenv.config({ path: './config.env' });
+
+const gateway = new braintree.BraintreeGateway({
+  environment: braintree.Environment.Sandbox,
+  merchantId: process.env.BRAINTREE_MERCHANT_ID,
+  publicKey: process.env.BRAINTREE_PUBLIC_KEY,
+  privateKey: process.env.BRAINTREE_PRIVATE_KEY,
+});
 
 exports.aliasTopTours = (req, res, next) => {
   req.query.limit = '5';
@@ -487,6 +496,73 @@ exports.relatedTours = catchAsync(async (req, res) => {
   }
 });
 
+
+// give token , response is a token
+exports.getToken = catchAsync(async (req, res) => {
+  try {
+    gateway.clientToken.generate({}, function (err, response) {
+      if (err) {
+        res.status(500).send(err);
+      } else {
+        res.send(response);
+      }
+    });
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+
+// process payments
+exports.processPayment = catchAsync(async (req, res) => {
+  try {
+    //console.log(req.body);
+
+    // nonce is payment method
+    // let nonce = req.body.nonce;
+
+    const { nonce, cart } = req.body;
+
+    let total = 0;
+
+    cart.map((i) => {
+      total += i.price;
+    });
+
+    //console.log("total => ", total);
+
+
+
+    let newTransaction = gateway.transaction.sale(
+      {
+        amount: total,
+        paymentMethodNonce: nonce,
+
+        options: {
+          submitForSettlement: true,
+        },
+      },
+      function (error, result) {
+        if (result) {
+          res.send(result);
+          // create order and save it in database
+          const order = new Order({
+            products: cart, // only product._id saved
+            payment: result,
+            buyer: req.user._id
+          }).save();
+          // decrement quantity(stock) and increment sold
+          //decrementQuantity(cart);
+          res.json({ ok: true });
+        } else {
+          res.status(500).send(error);
+        }
+      }
+    );
+  } catch (err) {
+    console.log(err);
+  }
+});
 
 
 // exports.list = catchAsync(async (req, res) => {

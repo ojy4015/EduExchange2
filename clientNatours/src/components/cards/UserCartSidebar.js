@@ -40,7 +40,7 @@ export default function UserCartSidebar() {
 
     const getClientToken = async () => {
         try {
-            const { data } = await axios("/braintree/token");
+            const { data } = await axios("/tours/braintree/token");
             //console.log("data=> ", data);
             setClientToken(data.clientToken);
         } catch (err) {
@@ -58,7 +58,7 @@ export default function UserCartSidebar() {
             setLoading(true);
             const { nonce } = await instance.requestPaymentMethod();
             //console.log("nonce=> ", nonce);
-            const { data } = await axios.post("/braintree/payment", {
+            const { data } = await axios.post("/tours/braintree/payment", {
                 nonce, cart
             });
             // console.log('handle by response => ', data);
