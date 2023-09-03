@@ -1,7 +1,7 @@
 //////////////////////// will be removed
-const bcryptjs = require("bcryptjs");
+import bcryptjs from "bcryptjs";
 
-exports.hashPassword = (password) => {
+const hashPassword = (password) => {
   return new Promise((resolve, reject) => {
     bcryptjs.genSalt(12, (err, salt) => {
       if (err) {
@@ -17,6 +17,8 @@ exports.hashPassword = (password) => {
   });
 };
 
-exports.comparePassword = (password, hashed) => {
+const comparePassword = (password, hashed) => {
   return bcryptjs.compare(password, hashed);
 };
+
+export {hashPassword, comparePassword}

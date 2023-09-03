@@ -1,14 +1,14 @@
-const crypto = require('crypto');
-const { promisify } = require('util');
-const jwt = require('jsonwebtoken');
-const User = require('./../models/userModel');
-const catchAsync = require('./../utils/catchAsync');
-const AppError = require('./../utils/appError');
-const sendEmail = require('./../utils/email');
-
+import crypto from 'crypto';
+import { promisify } from 'util';
+import jwt from 'jsonwebtoken';
+import User from './../models/userModel.js';
+import catchAsync from './../utils/catchAsync.js';
+import AppError from './../utils/appError.js';
+import sendEmail from './../utils/email.js';
+import * as config from "../config.js";
 
 //////////////////////////////////////////////////////to be modified
-const { hashPassword, comparePassword } = require("../helpers/auth.js");
+import { hashPassword, comparePassword } from "../helpers/auth.js";
 
 /////////////////////////////////////////////////////////////////
 
@@ -50,8 +50,57 @@ const createSendToken = (user, statusCode, res) => {
 
 };
 
+// send email to registe
+const preSignup = catchAsync(async (req, res) => {
+  // create jwt with email and password then email this token as clickable link
+  // when user click on that email link, registeration complete
+
+  // console.log(req.body);
+  // const {email, password} = req.body;
+
+  validation
+  if (!validator.validate(email)) {
+    return res.json({error: "A valid email is required"});
+  }
+
+  if(!password) {
+    return res.json({error: "Password is required"});
+  }
+  if(password && password?.length < 6) {
+    return res.json({error: "Password should be at least 6 characters"});
+  }
+
+    // check if email is already taken
+  const user = await User.findOne({email});
+  if (user) {
+    return res.json({error: "email is taken"});
+  }
+
+  const token = jwt.sign({email, password}, config.JWT_SECRET, {
+    expiresIn: config.JWT_TOKEN_EXPIRES_IN,
+  });
+
+  config.AWSSES.sendEmail(
+    
+    emailTemplate(email,`     
+      <p>Please click the link below to activate your account.</p>
+      <a href="${config.CLIENT_URL}/auth/account-activate/${token}">Activate my account</a>
+    `,
+    config.REPLY_TO, "Welcome to EduExchange"),
+    (err, data) => {
+    if (err) {
+      console.log(err);
+      return res.json({ ok: false });
+    } else {
+      console.log(data);
+      return res.json({ ok: true });
+    }
+  });
+});
+
+
 // to register admin first create new normal user and go to compass, edit a role from a user to a admin
-exports.signup = catchAsync(async (req, res, next) => {
+const signup = catchAsync(async (req, res, next) => {
   const { name, email, password, passwordConfirm, photo, role } = req.body;
 
   //console.log(name, email, password, passwordConfirm, photo, role);
@@ -67,7 +116,7 @@ exports.signup = catchAsync(async (req, res, next) => {
   createSendToken(newUser, 201, res);
 });
 
-exports.login = catchAsync(async (req, res, next) => {
+const login = catchAsync(async (req, res, next) => {
   const { email, password } = req.body;
 
   // 1) Check if email and password exist
@@ -88,7 +137,7 @@ exports.login = catchAsync(async (req, res, next) => {
   createSendToken(user, 200, res);
 });
 
-exports.protect = catchAsync(async (req, res, next) => {
+const protect = catchAsync(async (req, res, next) => {
 
   // 1) Getting token and check of it's there
   // let token;
@@ -138,7 +187,7 @@ exports.protect = catchAsync(async (req, res, next) => {
 });
 
 // must preceded by a protect middle ware because of req.user = currentUser
-exports.restrictTo = (...roles) => {
+const restrictTo = (...roles) => {
   // can access roles array becasue of closure
   return (req, res, next) => {
     // roles ['admin', 'lead-guide'] : has permission
@@ -153,7 +202,7 @@ exports.restrictTo = (...roles) => {
 };
 
 
-exports.forgotPassword = catchAsync(async (req, res, next) => {
+const forgotPassword = catchAsync(async (req, res, next) => {
   // 1) Get user based on POSTed email
   const { email } = req.body;
   // console.log("email in forgotPassword : ", { email });
@@ -198,7 +247,7 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
   // }
 });
 
-exports.resetPassword = catchAsync(async (req, res, next) => {
+const resetPassword = catchAsync(async (req, res, next) => {
   console.log('token : ', token);
   const { password, passwordConfirm } = req.body;
   console.log(password, passwordConfirm);
@@ -232,7 +281,7 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
   createSendToken(user, 200, res);
 });
 
-exports.updatePassword = catchAsync(async (req, res, next) => {
+const updatePassword = catchAsync(async (req, res, next) => {
   const { currentPassword, newPassword, confirmNewPassword } = req.body;
   //console.log("currentPassword, newPassword, confirmNewPassword in backend=>", currentPassword, newPassword, confirmNewPassword)
   // 1) Get user from collection
@@ -257,7 +306,7 @@ exports.updatePassword = catchAsync(async (req, res, next) => {
 
 /////////////////////////////////////////////////////////////////// to be modified
 // update name and address
-exports.updateProfile = catchAsync(async (req, res) => {
+const updateProfile = catchAsync(async (req, res) => {
   try {
     // const { name, password, address } = req.body;
     const { name, address } = req.body;
@@ -294,8 +343,5 @@ exports.updateProfile = catchAsync(async (req, res) => {
   }
 });
 
+export {preSignup, signup, login, protect, restrictTo, forgotPassword, resetPassword, updatePassword, updateProfile}
 /////////////////////////////////////////////////////////////
-
-
-
-////////////////////////////////////////////////////////////////////////////////////

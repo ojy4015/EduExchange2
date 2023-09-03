@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////////
-const mongoose = require('mongoose');
-const dotenv = require('dotenv');
-const app = require('./app');
+import mongoose from 'mongoose';
+import dotenv from 'dotenv';
+import app from './app.js';
 
 process.on('uncaughtException', err => {
   console.log('UNCAUGHT EXCEPTION! 💥 Shutting down...');

@@ -1,9 +1,9 @@
-const Review = require('./../models/reviewModel');
-const catchAsync = require('./../utils/catchAsync');
-const factory = require('./handlerFactory');
+import Review from './../models/reviewModel.js';
+import catchAsync from './../utils/catchAsync.js';
+import * as factory from './handlerFactory.js';
 
 // middleware running before createReview
-exports.setTourUserIds = catchAsync(async (req, res, next) => {
+const setTourUserIds = catchAsync(async (req, res, next) => {
   // Allow nested routes
   if(!req.body.tour) req.body.tour = req.params.tourId;
   // req.user.id comes from protect middleware
@@ -12,8 +12,10 @@ exports.setTourUserIds = catchAsync(async (req, res, next) => {
 });
 
 // thanks to closure
-exports.getAllReviews = factory.getAll(Review);
-exports.createReview = factory.createOne(Review);
-exports.getReview = factory.getOne(Review);
-exports.updateReview = factory.updateOne(Review);
-exports.deleteReview = factory.deleteOne(Review);
+const getAllReviews = factory.getAll(Review);
+const createReview = factory.createOne(Review);
+const getReview = factory.getOne(Review);
+const updateReview = factory.updateOne(Review);
+const deleteReview = factory.deleteOne(Review);
+
+export {getAllReviews, createReview, getReview,updateReview, deleteReview}

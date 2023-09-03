@@ -1,5 +1,6 @@
 {
   "name": "natours",
+  "type": "module",
   "version": "1.0.0",
   "description": "Learning node, express and mongoDB",
   "main": "server.js",
@@ -12,6 +13,7 @@
   "license": "ISC",
   "dependencies": {
     "antd": "^5.8.3",
+    "aws-sdk": "^2.1450.0",
     "bcrypt": "^5.1.1",
     "bcryptjs": "^2.4.3",
     "braintree": "^3.16.0",

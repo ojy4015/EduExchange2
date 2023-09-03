@@ -1,6 +1,6 @@
-const mongoose = require('mongoose');
-const slugify = require('slugify');
-const validator = require('validator');
+import mongoose from 'mongoose';
+import slugify from 'slugify';
+import validator from 'validator';
 // only in embedd object
 // const User = require('./userModel');
 
@@ -202,7 +202,7 @@ categorySchema.post(/^find/, function(docs, next) {
 
 const Category = mongoose.model('Category', categorySchema);
 
-module.exports = Category;
+export default Category;
 
 
 

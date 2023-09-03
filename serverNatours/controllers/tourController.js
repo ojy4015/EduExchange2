@@ -1,11 +1,11 @@
-const Tour = require('./../models/tourModel');
-const catchAsync = require('./../utils/catchAsync');
-const AppError = require('./../utils/appError');
-const factory = require('./handlerFactory');
-const braintree = require("braintree");
-const fs = require('fs');
-const dotenv = require('dotenv');
-const Order = require('../models/order');
+import Tour from './../models/tourModel.js';
+import catchAsync from './../utils/catchAsync.js';
+import AppError from './../utils/appError.js';
+import * as factory from './handlerFactory.js';
+import braintree from "braintree";
+import fs from 'fs';
+import dotenv from 'dotenv';
+import Order from '../models/order.js';
 
 dotenv.config({ path: './config.env' });
 
@@ -16,14 +16,14 @@ const gateway = new braintree.BraintreeGateway({
   privateKey: process.env.BRAINTREE_PRIVATE_KEY,
 });
 
-exports.aliasTopTours = (req, res, next) => {
+const aliasTopTours = (req, res, next) => {
   req.query.limit = '5';
   req.query.sort = '-ratingsAverage,price';
   req.query.fields = 'name,price,ratingsAverage,summary,difficulty';
   next();
 };
 
-exports.getTourStats = catchAsync(async (req, res, next) => {
+const getTourStats = catchAsync(async (req, res, next) => {
   const stats = await Tour.aggregate([
     {
       $match: { ratingsAverage: { $gte: 4.5 } }
@@ -55,7 +55,7 @@ exports.getTourStats = catchAsync(async (req, res, next) => {
   });
 });
 
-exports.getMonthlyPlan = catchAsync(async (req, res, next) => {
+const getMonthlyPlan = catchAsync(async (req, res, next) => {
   const year = req.params.year * 1; // 2021
 
   const plan = await Tour.aggregate([
@@ -102,64 +102,15 @@ exports.getMonthlyPlan = catchAsync(async (req, res, next) => {
 });
 
 // thanks to closure
-exports.getTour = factory.getOne(Tour, { path: 'reviews' });
-exports.getAllTours = factory.getAll(Tour);
-exports.createTour = factory.createOne(Tour);
+const getTour = factory.getOne(Tour, { path: 'reviews' });
+const getAllTours = factory.getAll(Tour);
+const createTour = factory.createOne(Tour);
 //exports.createTour = factory.create();
-exports.updateTour = factory.updateOne(Tour);
-exports.deleteTour = factory.deleteOne(Tour);
+const updateTour = factory.updateOne(Tour);
+const deleteTour = factory.deleteOne(Tour);
 
 
-// router.route('/tours-within/:distance/center/:latlng/unit/:unit', getToursWithin);
-
-// /tours-within?distance=233&center=-40,45&unit=mi(doesn't work)
-// /tours-within/233/center/34.017763, -118.336262/unit/mi
-
-
-// exports.create = catchAsync(async (req, res) => {
-//   try {
-//     console.log(req.files, req.fields);
-
-//     // const { name, description, price, category, quantity, shipping } =
-//     //   req.fields;
-//     // const { photo } = req.files;
-
-//     // // validation
-//     // switch (true) {
-//     //   case !name.trim():
-//     //     return res.json({ error: "Name is required" });
-//     //   case !description.trim():
-//     //     return res.json({ error: "Description is required" });
-//     //   case !price.trim():
-//     //     return res.json({ error: "Price is required" });
-//     //   case !category.trim():
-//     //     return res.json({ error: "Category is required" });
-//     //   case !quantity.trim():
-//     //     return res.json({ error: "Quantity is required" });
-//     //   case !shipping.trim():
-//     //     return res.json({ error: "Shipping is required" });
-//     //   case photo && photo.size > 1000000: //1Mbyte
-//     //     return res.json({ error: "Image should be less than 1mb in size" });
-//     // }
-
-//     // // create product
-//     // const product = new Product({ ...req.fields, slug: slugify(name) });
-
-//     // if (photo) {
-//     //   product.photo.data = fs.readFileSync(photo.path);
-//     //   product.photo.contentType = photo.type;
-//     // }
-
-//     // await product.save();
-//     // res.json(product);
-//   } catch (err) {
-//     console.log(err);
-//     return res.status(400).json(err.message);
-//   }
-// });
-
-
-exports.getToursWithin = catchAsync(async (req, res, next) => {
+const getToursWithin = catchAsync(async (req, res, next) => {
   const { distance, latlng, unit } = req.params;
   const [lat, lng] = latlng.split(',');
 
@@ -184,7 +135,7 @@ exports.getToursWithin = catchAsync(async (req, res, next) => {
   });
 });
 
-exports.getDistances = catchAsync(async (req, res, next) => {
+const getDistances = catchAsync(async (req, res, next) => {
   const { latlng, unit } = req.params;
   const [lat, lng] = latlng.split(',');
 
@@ -230,7 +181,7 @@ exports.getDistances = catchAsync(async (req, res, next) => {
 ////////////////////////////////////////////////////////////////
 
 
-exports.create = catchAsync(async (req, res, next) => {
+const create = catchAsync(async (req, res, next) => {
   //console.log("in tourController: " + req.files, req.fields);
 
   try {
@@ -289,7 +240,7 @@ exports.create = catchAsync(async (req, res, next) => {
 });
 
 
-exports.update = catchAsync(async (req, res, next) => {
+const update = catchAsync(async (req, res, next) => {
   //console.log("in tourController: " + req.files, req.fields);
 
   try {
@@ -356,7 +307,7 @@ exports.update = catchAsync(async (req, res, next) => {
   }
 });
 
-exports.photo = catchAsync(async (req, res, next) => {
+const photo = catchAsync(async (req, res, next) => {
   try {
     //console.log("id in photo: ", req.params.photoId);
     const product = await Tour.findById(req.params.photoId).select(
@@ -372,7 +323,7 @@ exports.photo = catchAsync(async (req, res, next) => {
 });
 
 
-exports.read = catchAsync(async (req, res, next) => {
+const read = catchAsync(async (req, res, next) => {
 
   try {
     //console.log("params.slug=> ", req.params.slug);
@@ -386,7 +337,7 @@ exports.read = catchAsync(async (req, res, next) => {
   }
 });
 
-exports.filteredTours = catchAsync(async (req, res) => {
+const filteredTours = catchAsync(async (req, res) => {
 
   try {
     console.log("inside filteredTours");
@@ -405,18 +356,6 @@ exports.filteredTours = catchAsync(async (req, res) => {
     const tours = await Tour.find(args)
       .select("-photo")
       .populate("category");
-    // const products = await Tour.find({
-    //   category: ["64d792173d7b422db01fe7d2", "64d792203d7b422db01fe7d4"],
-    //   price: { $gte: radio[0], $lt: radio[1] }
-    // });
-    // const tours = await Tour.find({
-    //   category: ["64d792253d7b422db01fe7d5"],
-    //   price: { $gte: radio[0], $lt: radio[1] }
-    // });
-    // const products = await Tour.find({
-    //   category: ["64d792173d7b422db01fe7d2", "64d792203d7b422db01fe7d4"],
-    //   price: { $gte: 10, $lt: 59 }
-    // });
 
 
     console.log("tours found in filtered tours query => ", tours.length);
@@ -428,7 +367,7 @@ exports.filteredTours = catchAsync(async (req, res) => {
   }
 });
 
-exports.toursCount = catchAsync(async (req, res) => {
+const toursCount = catchAsync(async (req, res) => {
   try {
 
     const total = await Tour.find({}).estimatedDocumentCount();
@@ -439,7 +378,7 @@ exports.toursCount = catchAsync(async (req, res) => {
   }
 });
 
-exports.listTours = catchAsync(async (req, res) => {
+const listTours = catchAsync(async (req, res) => {
   try {
     const perPage = process.env.PERPAGE * 1;
     console.log('perPage: ', perPage);
@@ -457,7 +396,7 @@ exports.listTours = catchAsync(async (req, res) => {
   }
 });
 
-exports.toursSearch = catchAsync(async (req, res) => {
+const toursSearch = catchAsync(async (req, res) => {
   try {
     const { keyword } = req.params;
     //console.log('keyword: ', keyword);
@@ -478,7 +417,7 @@ exports.toursSearch = catchAsync(async (req, res) => {
   }
 });
 
-exports.relatedTours = catchAsync(async (req, res) => {
+const relatedTours = catchAsync(async (req, res) => {
   try {
     const { tourId, categoryId } = req.params;
     console.log(tourId, categoryId);
@@ -498,7 +437,7 @@ exports.relatedTours = catchAsync(async (req, res) => {
 
 
 // give token , response is a token
-exports.getToken = catchAsync(async (req, res) => {
+const getToken = catchAsync(async (req, res) => {
   try {
     gateway.clientToken.generate({}, function (err, response) {
       if (err) {
@@ -514,7 +453,7 @@ exports.getToken = catchAsync(async (req, res) => {
 
 
 // process payments
-exports.processPayment = catchAsync(async (req, res) => {
+const processPayment = catchAsync(async (req, res) => {
   try {
     //console.log(req.body);
 
@@ -528,10 +467,6 @@ exports.processPayment = catchAsync(async (req, res) => {
     cart.map((i) => {
       total += i.price;
     });
-
-    //console.log("total => ", total);
-
-
 
     let newTransaction = gateway.transaction.sale(
       {
@@ -564,21 +499,4 @@ exports.processPayment = catchAsync(async (req, res) => {
   }
 });
 
-
-// exports.list = catchAsync(async (req, res) => {
-//   console.log("in tourController list: " + req);
-//   try {
-//     const tours = await Tour.find({})
-//       .populate("category")
-//       .select("-photo")
-//       .limit(5)
-//       .sort({ createdAt: -1 });
-
-//     res.json(tours);
-//   } catch (err) {
-//     console.log(err);
-//   }
-// });
-
-
-// this part is added for test Github
+export {aliasTopTours, getTourStats, getMonthlyPlan, getTour, getAllTours, createTour, updateTour, deleteTour, getToursWithin, getDistances, create, update, photo, read, filteredTours, toursCount, listTours, toursSearch, relatedTours, getToken, processPayment}

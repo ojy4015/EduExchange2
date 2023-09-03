@@ -52,11 +52,11 @@
 ////////////////////////////////////////////////////////////////////////
 
 
-const express = require('express');
+import express from 'express';
 
-const categoryController = require('./../controllers/categoryController');
-const authController = require('./../controllers/authController');
-const reviewRouter = require('./../routes/reviewRoutes');
+import * as categoryController from './../controllers/categoryController.js';
+import * as authController from './../controllers/authController.js';
+import * as reviewRouter from './../routes/reviewRoutes.js';
 
 const router = express.Router();
 
@@ -83,7 +83,7 @@ router
     categoryController.deleteCategory
   );
 
-module.exports = router;
+export default router;
 
 
 

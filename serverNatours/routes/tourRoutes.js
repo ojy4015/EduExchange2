@@ -1,8 +1,8 @@
-const express = require('express');
-const tourController = require('./../controllers/tourController');
-const authController = require('./../controllers/authController');
-const reviewRouter = require('./../routes/reviewRoutes');
-const formidableMiddleware = require('express-formidable');
+import express from 'express';
+import * as tourController from './../controllers/tourController.js';
+import * as authController from './../controllers/authController.js';
+import * as reviewRouter from './../routes/reviewRoutes.js';
+import formidableMiddleware from 'express-formidable';
 
 const router = express.Router();
 
@@ -92,9 +92,9 @@ router
     tourController.deleteTour
   );
 
-router.use('/:tourId/reviews', reviewRouter);
+// router.use('/:tourId/reviews', reviewRouter);
 
-module.exports = router;
+export default router;
 
 
 

@@ -1,19 +1,19 @@
-const path = require('path');
-const express = require('express');
-const morgan = require('morgan');
-const rateLimit = require('express-rate-limit');
-const helmet = require('helmet');
-const mongoSanitize = require('express-mongo-sanitize');
-const xss = require('xss-clean');
-const hpp = require('hpp');
-const cors = require('cors');
+import path from 'path';
+import express from 'express';
+import morgan from 'morgan';
+import rateLimit from 'express-rate-limit';
+import helmet from 'helmet';
+import mongoSanitize from 'express-mongo-sanitize';
+import xss from 'xss-clean';
+import hpp from 'hpp';
+import cors from 'cors';
 
-const AppError = require('./utils/appError');
-const globalErrorHandler = require('./controllers/errorController');
-const tourRouter = require('./routes/tourRoutes');
-const categoryRouter = require('./routes/categoryRoutes');
-const userRouter = require('./routes/userRoutes');
-const reviewRouter = require('./routes/reviewRoutes');
+import AppError from './utils/appError.js';
+import globalErrorHandler from './controllers/errorController.js';
+import  tourRouter from './routes/tourRoutes.js';
+import  categoryRouter from './routes/categoryRoutes.js';
+import  userRouter from './routes/userRoutes.js';
+// import  reviewRouter from './routes/reviewRoutes.js';
 
 const app = express();
 
@@ -24,6 +24,12 @@ app.use(cors({
 
 // Serving static files
 // app.use(express.static(`${__dirname}/public`));
+// // const __dirname = dirname(fileURLToPath(import.meta.url));
+// import path from 'path';
+import { fileURLToPath } from 'url';
+const __filename = fileURLToPath(import.meta.url);
+
+const __dirname = path.dirname(__filename);
 app.use(express.static(path.join(__dirname, 'public')));
 
 ///////////////////// global middlewares
@@ -80,7 +86,7 @@ app.use((req, res, next) => {
 app.use('/api/v1/tours', tourRouter);
 app.use('/api/v1/categorys', categoryRouter);
 app.use('/api/v1/users', userRouter);
-app.use('/api/v1/reviews', reviewRouter);
+// app.use('/api/v1/reviews', reviewRouter);
 
 app.all('*', (req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
@@ -89,7 +95,7 @@ app.all('*', (req, res, next) => {
 // error handling middleware
 app.use(globalErrorHandler);
 
-module.exports = app;
+export default app;
 
 
 ///////////////////////////////////////////////

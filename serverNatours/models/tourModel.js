@@ -1,6 +1,6 @@
-const mongoose = require('mongoose');
-const slugify = require('slugify');
-const validator = require('validator');
+import mongoose from 'mongoose';
+import slugify from 'slugify';
+import validator from 'validator';
 // only in embedd object
 // const User = require('./userModel');
 
@@ -214,4 +214,4 @@ tourSchema.post(/^find/, function (docs, next) {
 
 const Tour = mongoose.model('Tour', tourSchema);
 
-module.exports = Tour;
+export default Tour;
