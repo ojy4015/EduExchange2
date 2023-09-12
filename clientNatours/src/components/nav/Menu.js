@@ -21,11 +21,15 @@ export default function Menu() {
   // hooks
 
   const logout = () => {
+    // setAuth({ ...auth, user: null, token: "", refreshToken: "" });
     setAuth({ ...auth, user: null, token: "" });
     localStorage.removeItem("auth");
     toast.success("Logout successful");
     navigate("/login");
   }
+
+  // const loggedIn = auth.user !== null && auth.token !== "" && auth.refreshToken !== "";
+  const loggedIn = auth.user !== null && auth.token !== "";
 
   return (
     <>
@@ -86,49 +90,42 @@ export default function Menu() {
           </Badge>
         </li>
 
-        {!auth?.user ? (
+        { !loggedIn ? (
           <>
-            <li className="nav-item">
-              <NavLink className="nav-link" to="/login">LOGIN</NavLink>
+          <li className="nav-item">
+            <NavLink className="nav-link" to="/login">LOGIN</NavLink>
             </li>
             <li className="nav-item">
               <NavLink className="nav-link" to="/register">REGISTER</NavLink>
             </li>
           </>
-        ) : (
+        ) : ("")}
+
+        { loggedIn ? (
           <div className="dropdown">
             <li>
               <a
                 className="nav-link pointer dropdown-toggle"
                 data-bs-toggle="dropdown">
-                {auth?.user?.name?.toUpperCase()}
+                {auth?.user?.name ? auth.user.name.toUpperCase() : `${auth?.user?.role[0] === 'admin' ? "ADMIN" : "USER"}`}
               </a>
 
               <ul className="dropdown-menu">
-                {/* <li>
-                  <NavLink
-                    className="nav-link"
-                    to={`/dashboard/${auth?.user?.role === 'admin' ? "admin" : "user"}`}           
-                  >
-                    Dashboard
-                  </NavLink>
-                </li> */}
                 <li>
                   <NavLink
                     className="nav-link"
-                    to={`/dashboard/${auth?.user?.role}`}
+                    to={`/dashboard/${auth?.user?.role[0] === 'admin' ? "admin" : "user"}`}           
                   >
                     Dashboard
                   </NavLink>
                 </li>
-
                 <li className="nav-item pointer">
                   <a onClick={logout} className="nav-link">Logout</a>
                 </li>
               </ul>
             </li>
           </div>
-        )}
+        ) : ("")}
 
       </ul>
     </>

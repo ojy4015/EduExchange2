@@ -49,26 +49,25 @@ export default function AdminRoute() {
     // context
     const [auth, setAuth] = useAuth();
 
-    // state, set ok true only when someone logged in 
+    // state, set ok true only when admin logged in 
     const [ok, setOk] = useState(false);
 
     // using token from the client side and
     // make a request to the server and wait for response
 
+    useEffect(() => {     
+        if (auth?.token) adminCheck();
+    }, [auth?.token]);
+
     const adminCheck = async () => {
         const { data } = await axios.get(`/users/admin-check`);
         // console.log('data;',data);
-        if (data.ok) {
+        if (data) {
             setOk(true);
         } else {
             setOk(false);
         }
     };
-    
-    useEffect(() => {
-          
-        if (auth?.token) adminCheck();
-    }, [auth?.token]);
     
   // path="" : homepage로 이동
     return ok ? <Outlet /> : <Loading path="" />;

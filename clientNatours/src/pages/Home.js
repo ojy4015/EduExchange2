@@ -108,15 +108,19 @@
 // }
 
 ////////////////////////////////////////////////////////////////////////
-
+import { useAuth } from '../context/auth';
 import { useEffect, useState } from "react";
 import Jumbotron from "../components/cards/Jumbotron";
 import ProductCard from '../components/cards/ProductCard';
 import axios from "axios";
 import type { PaginationProps } from 'antd';
 import { Pagination } from 'antd';
+// import { useAuth } from '../context/auth';
 
 export default function Home() {
+  // context
+  const [auth, setAuth] = useAuth();
+
   const [products, setProducts] = useState([]);
   const [total, setTotal] = useState(0);
   const [page, setPage] = useState(1);
@@ -159,8 +163,8 @@ export default function Home() {
     console.log(page1);
     setCurrent(page1);
     // {page1 === 1 ?  window.location.reload() : setPage(page1)}; 
-    setPage(page1); 
-    
+    setPage(page1);
+
   };
 
   const loadMore = async () => {
@@ -187,9 +191,10 @@ export default function Home() {
   const sortBySold = arr?.sort((a, b) => (a.sold < b.sold ? 1 : -1));
 
   return (
+
     <div>
       <Jumbotron title="Natours Tours" sutTitle="Welcome to Natours Tours" />
-      <div>Test code for Git hub here</div>
+      {/* <pre>{JSON.stringify(auth, null, 4)}</pre> */}
       <div className="container-fluid">
         <div className="row">
           <div className="col-md-6">
@@ -203,7 +208,7 @@ export default function Home() {
                 </div>
               ))}
             </div>
-            
+
           </div>
 
           <div className="col-md-6">
@@ -223,7 +228,7 @@ export default function Home() {
         <div className="container text-center p-5">
           {products && products.length < total && (
             <>
-              <Pagination showQuickJumper total={total} onChange={onChange} pageSize={4}/>
+              <Pagination showQuickJumper total={total} onChange={onChange} pageSize={4} />
               {/* <button
                 className="btn btn-warning btn-lg col-md-6"
                 disabled={loading}
@@ -234,16 +239,18 @@ export default function Home() {
               >
                 {loading ? "Loading..." : "Load more"}
               </button> */}
-            
+
             </>
-            
+
           )}
         </div>
-        <br/>
-        <br/>
-        
+        <br />
+        <br />
+
       </div>
+
     </div>
+
   );
 }
 

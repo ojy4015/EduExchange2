@@ -13,11 +13,6 @@ const getMe = (req, res, next) => {
 const deleteMe = catchAsync(async (req, res, next) => {
   await User.findByIdAndUpdate(req.user.id, { active: false });
 
-
-  // res.status(204).json({
-  //   status: 'success',
-  //   data: null
-  // });
   res.json(null);
 });
 

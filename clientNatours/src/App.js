@@ -9,14 +9,14 @@ import Home from './pages/Home';
 import Login from './pages/auth/Login';
 import Register from './pages/auth/Register';
 import Dashboard from './pages/user/Dashboard';
-import AdminDashboard from './pages/admin/Dashboard.js';
-import AdminCategory from './pages/admin/Category.js';
-import AdminProduct from './pages/admin/Product.js';
-import AdminProducts from './pages/admin/Products.js';
-import AdminProductUpdate from './pages/admin/ProductUpdate.js'
-import UserProfile from './pages/user/Profile.js';
-import ChangePassword from './pages/user/ChangePassword.js';
-import UserOrders from './pages/user/Orders.js';
+import AdminDashboard from './pages/admin/Dashboard';
+import AdminCategory from './pages/admin/Category';
+import AdminProduct from './pages/admin/Product';
+import AdminProducts from './pages/admin/Products';
+import AdminProductUpdate from './pages/admin/ProductUpdate'
+import UserProfile from './pages/user/Profile';
+import ChangePassword from './pages/user/ChangePassword';
+import UserOrders from './pages/user/Orders';
 import PrivateRoute from './components/routes/PrivateRoute';
 import AdminRoute from './components/routes/AdminRoute';
 import PageNotFound from './pages/user/PageNotFound';
@@ -31,6 +31,9 @@ import ProductView from './pages/ProductView';
 import CategoriesList from './pages/CategoriesList';
 import CategoryView from './pages/CategoryView';
 import AdminOrders from './pages/admin/Orders';
+import AccountActivate from "./pages/auth/AccountActivate";
+import ForgotPassword from "./pages/auth/ForgotPassword";
+import AccessAccount from "./pages/auth/AccessAccount";
 
 export default function App() {
     return (
@@ -48,6 +51,10 @@ export default function App() {
                 <Route path="/product/:slug" element={<ProductView />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
+                <Route path="/auth/account-activate/:token" element={<AccountActivate />} />
+                <Route path="/auth/forgot-password" element={<ForgotPassword />} />
+                <Route path="/auth/access-account/:token" element={<AccessAccount />} />
+
                 <Route path="/dashboard" element={<PrivateRoute />} >
                     <Route path="user" element={<Dashboard />} />
                     <Route path="user/profile" element={<UserProfile />} />

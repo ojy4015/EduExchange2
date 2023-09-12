@@ -10,9 +10,9 @@ import cors from 'cors';
 
 import AppError from './utils/appError.js';
 import globalErrorHandler from './controllers/errorController.js';
-import  tourRouter from './routes/tourRoutes.js';
-import  categoryRouter from './routes/categoryRoutes.js';
-import  userRouter from './routes/userRoutes.js';
+import tourRouter from './routes/tourRoutes.js';
+import categoryRouter from './routes/categoryRoutes.js';
+import userRouter from './routes/userRoutes.js';
 // import  reviewRouter from './routes/reviewRoutes.js';
 
 const app = express();
@@ -88,6 +88,7 @@ app.use('/api/v1/categorys', categoryRouter);
 app.use('/api/v1/users', userRouter);
 // app.use('/api/v1/reviews', reviewRouter);
 
+// all the routes coming this step is caught here
 app.all('*', (req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
 });
@@ -98,19 +99,4 @@ app.use(globalErrorHandler);
 export default app;
 
 
-///////////////////////////////////////////////
-
-// 1) GLOBAL MIDDLEWARES
-// to communicatge between different domain
-// app.use(cors({
-//   origin: "http://localhost:3000/test",
-//   methods: ['GET', 'POST']
-// }));
-// app.use(cors({
-//   origin: "http://localhost:3000/test",
-//   credentials: "include"
-// }));
-// app.use(cors({
-//   origin: "http://localhost:3000/test",
-//   credentials: true
-// }));
+///////////////////////////////////////////////;

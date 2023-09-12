@@ -29,6 +29,7 @@
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.13.20",
     "morgan": "^1.9.1",
+    "nanoid": "^4.0.2",
     "nodemailer": "^6.1.1",
     "nodemon": "^3.0.1",
     "react-icons": "^4.10.1",

@@ -1,13 +1,13 @@
 //////////////////////// will be removed
-import bcryptjs from "bcryptjs";
+import bcrypt from "bcrypt";
 
-const hashPassword = (password) => {
+export const hashPassword = (password) => {
   return new Promise((resolve, reject) => {
-    bcryptjs.genSalt(12, (err, salt) => {
+    bcrypt.genSalt(12, (err, salt) => {
       if (err) {
         reject(err);
       }
-      bcryptjs.hash(password, salt, (err, hash) => {
+      bcrypt.hash(password, salt, (err, hash) => {
         if (err) {
           reject(err);
         }
@@ -17,8 +17,6 @@ const hashPassword = (password) => {
   });
 };
 
-const comparePassword = (password, hashed) => {
-  return bcryptjs.compare(password, hashed);
+export const comparePassword = (password, hashed) => {
+  return bcrypt.compare(password, hashed);
 };
-
-export {hashPassword, comparePassword}

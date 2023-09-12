@@ -12,7 +12,6 @@ export default function AdminDashboard() {
             <Jumbotron title={`Hello ${auth?.user?.name}`}
                 subTitle="Admin Dashboard"
             />
-
              <div className="container-fluid">
                 <div className="row">
                     <div className="col-md-3">

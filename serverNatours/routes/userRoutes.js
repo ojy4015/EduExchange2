@@ -10,7 +10,12 @@ router.post('/pre-signup', authController.preSignup);
 router.post('/signup', authController.signup);
 router.post('/login', authController.login);
 router.post('/forgotPassword', authController.forgotPassword);
+router.post("/access-account", authController.accessAccount);
+// router.get("/refresh-token", authController.refreshToken);
 router.patch('/resetPassword/:token', authController.resetPassword);
+// get anyuser without logged in
+router.get('/profile/:username', authController.publicProfile);
+
 
 // Protect all routes after this middleware 
 router.use(authController.protect);
@@ -21,10 +26,8 @@ router.put(
   authController.updateProfile
 );
 
-
-router.get("/auth-check", (req, res) => {
-  res.json({ ok: true });
-});
+// if someone is logged in
+router.get("/current-user", authController.currentUser);
 
 // update password for logged user
 router.patch(
@@ -32,6 +35,7 @@ router.patch(
   authController.updatePassword
 );
 
+// get currently logged-in user from MongoDB
 router.get('/me',
   userController.getMe,
   userController.getUser
@@ -44,9 +48,7 @@ router.delete('/deleteMe', userController.deleteMe);
 // only admin do these
 router.use(authController.restrictTo('admin'));
 
-router.get("/admin-check", (req, res) => {
-  res.json({ ok: true });
-});
+router.get("/admin-check", authController.currentUser);
 
 router
   .route('/')
