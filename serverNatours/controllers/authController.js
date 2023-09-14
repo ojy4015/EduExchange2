@@ -112,7 +112,7 @@ export const signup = catchAsync(async (req, res, next) => {
 
   const { token } = req.body;
 
-   const { email, password } = jwt.verify(token, config.JWT_SECRET);
+  const { email, password } = jwt.verify(token, config.JWT_SECRET);
 
   const newUser = await User.create({
     username: nanoid(6),
@@ -179,6 +179,9 @@ export const protect = catchAsync(async (req, res, next) => {
 
   // GRANT ACCESS TO PROTECTED ROUTE
   req.user = currentUser;
+
+  // console.log("req.user._id: ", req.user._id);
+  // console.log("req.user.id: ", req.user.id);
 
   next();
 });
@@ -265,7 +268,7 @@ export const accessAccount = catchAsync(async (req, res, next) => {
 });
 
 // export const refreshToken = catchAsync(async (req, res, next) => {
- 
+
 //   const decoded = jwt.verify(req.headers.refresh_token, config.JWT_SECRET);
 //   //console.log('decoded => ', decoded);
 

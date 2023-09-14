@@ -269,6 +269,7 @@ function onFocus() {
 function onSearch(val) {
     console.log('search:', val);
 }
+
 export default function AdminProductUpdate() {
     // context
     const [auth, setAuth] = useAuth();
@@ -289,13 +290,14 @@ export default function AdminProductUpdate() {
     const [photo, setPhoto] = useState("");
     const [category, setCategory] = useState("");
     const [id, setId] = useState("");
+    const [quantity, setQuantity] = useState("");
     const [sold, setSold] = useState("");
 
     // hook
     const navigate = useNavigate();
     const params = useParams();
 
-    //console.log("params => ", params);
+    
 
     useEffect(() => {
         loadCategories();
@@ -321,6 +323,7 @@ export default function AdminProductUpdate() {
 
     const loadProduct = async () => {
         try {
+            console.log("params => ", params);
             const { data } = await axios.get(`/tours/${params.slug}`);
             console.log("data in loadProduct in ProductUpdate=> ", data);
 
@@ -339,6 +342,7 @@ export default function AdminProductUpdate() {
             setRatingsQuantity(data.ratingsQuantity);
             setPrice(data.price);
             setPriceDiscount(data.priceDiscount);
+            setQuantity(data.quantity);
             setSold(data.sold);
             setSummary(data.summary);
 
@@ -349,7 +353,7 @@ export default function AdminProductUpdate() {
         }
     }
 
-    const handleSubmit = async (e) => {
+    const handleUpdate = async (e) => {
         e.preventDefault();
         try {
             const tourData = new FormData();
@@ -364,10 +368,11 @@ export default function AdminProductUpdate() {
             tourData.append("ratingsQuantity", ratingsQuantity);
             tourData.append("price", price);
             tourData.append("priceDiscount", priceDiscount);
+            tourData.append("quantity", quantity);
             tourData.append("sold", sold);
             tourData.append("summary", summary);
 
-            //console.log([...tourData]);
+            // console.log([...tourData]);
             const { data } = await axios.put(`/tours/${id}`, tourData);
 
             if (data?.error) {
@@ -404,9 +409,6 @@ export default function AdminProductUpdate() {
             <Jumbotron title={`Hello ${auth?.user?.name}`}
                 subTitle="Admin Dashboard"
             />
-
-
-
 
             <div className="container-fluid">
                 <div className="row">
@@ -538,6 +540,13 @@ export default function AdminProductUpdate() {
                         <input
                             type="number"
                             className="form-control p-2 mb-3"
+                            placeholder="Enter quantity number"
+                            value={quantity}
+                            onChange={(e) => setQuantity(e.target.value)}
+                        />
+                        <input
+                            type="number"
+                            className="form-control p-2 mb-3"
                             placeholder="Enter sold number"
                             value={sold}
                             onChange={(e) => setSold(e.target.value)}
@@ -551,7 +560,7 @@ export default function AdminProductUpdate() {
                             onChange={(e) => setSummary(e.target.value)}
                         />
                         <div className="d-flex justify-content-between">
-                            <button onClick={handleSubmit} className="btn btn-primary mb-5">
+                            <button onClick={handleUpdate} className="btn btn-primary mb-5">
                                 Update
                             </button>
                             <button onClick={handleDelete} className="btn btn-danger mb-5">

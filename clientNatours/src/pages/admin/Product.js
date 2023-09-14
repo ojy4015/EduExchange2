@@ -213,6 +213,7 @@ function onFocus() {
 function onSearch(val) {
     console.log('search:', val);
 }
+
 export default function AdminProduct() {
     // context
     const [auth, setAuth] = useAuth();
@@ -232,6 +233,7 @@ export default function AdminProduct() {
     const [images, setImages] = useState("");
     const [photo, setPhoto] = useState("");
     const [category, setCategory] = useState("");
+    const [quantity, setQuantity] = useState("");
     const [sold, setSold] = useState("");
 
     // hook
@@ -270,10 +272,12 @@ export default function AdminProduct() {
             tourData.append("ratingsQuantity", ratingsQuantity);
             tourData.append("price", price);
             tourData.append("priceDiscount", priceDiscount);
+            tourData.append("quantity", quantity);
             tourData.append("sold", sold);
             tourData.append("summary", summary);
 
             //console.log([...tourData]);
+            
             const { data } = await axios.post("/tours", tourData);
 
             if (data?.error) {
@@ -293,9 +297,6 @@ export default function AdminProduct() {
             <Jumbotron title={`Hello ${auth?.user?.name}`}
                 subTitle="Admin Dashboard"
             />
-
-
-
 
             <div className="container-fluid">
                 <div className="row">
@@ -412,7 +413,13 @@ export default function AdminProduct() {
                             value={priceDiscount}
                             onChange={(e) => setPriceDiscount(e.target.value)}
                         />
-
+                        <input
+                            type="number"
+                            className="form-control p-2 mb-3"
+                            placeholder="Enter quantity number"
+                            value={quantity}
+                            onChange={(e) => setQuantity(e.target.value)}
+                        />
                         <input
                             type="number"
                             className="form-control p-2 mb-3"

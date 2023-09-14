@@ -127,6 +127,9 @@ const tourSchema = new mongoose.Schema(
       data: Buffer,
       contentType: String,
     },
+    quantity: {
+      type: Number,
+    },
     sold: {
       type: Number,
       default: 0,

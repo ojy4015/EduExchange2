@@ -147,9 +147,9 @@ export default function UserCartSidebar() {
                         <button
                             onClick={handleBuy}
                             className="btn btn-primary col-12 mt-2"
-                            disabled={!instance || loading}
+                            disabled={!auth?.user?.address || !instance || loading}
                         >
-                            {loading ? "Processing" : "Buy"}
+                            {loading ? "Processing..." : "Buy"}
 
                         </button>
                     </>

@@ -19,7 +19,7 @@ export const emailTemplate = (email, content, replyTo, subject) => {
           Data: `
             <html>
               <div style="${style}">
-                <h1>Welcome to Realist App<h1>
+                <h1>Welcome to EduExchange<h1>
                 ${content}
                 <p>&copy; ${new Date().getFullYear()}</p>
               </div>

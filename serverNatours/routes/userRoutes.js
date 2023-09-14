@@ -20,6 +20,9 @@ router.get('/profile/:username', authController.publicProfile);
 // Protect all routes after this middleware 
 router.use(authController.protect);
 
+// orders
+router.get("/orders", userController.getOrders);
+
 // update name, address
 router.put(
   '/profile',
@@ -54,6 +57,11 @@ router
   .route('/')
   .get(userController.getAllUsers)
   .post(userController.createUser);
+
+router
+  .route('/all-orders')
+  .get(userController.getAllOrders);
+
 
 router
   .route('/:id')

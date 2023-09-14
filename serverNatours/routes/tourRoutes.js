@@ -85,6 +85,7 @@ router
     tourController.updateTour)
   .put(authController.protect,
     authController.restrictTo('admin', 'lead-guide'),
+    formidableMiddleware(),
     tourController.update)
   .delete(
     authController.protect,
@@ -94,6 +95,10 @@ router
 
 // router.use('/:tourId/reviews', reviewRouter);
 
+router
+  .route("/order-status/:orderId")
+  .put(authController.protect, authController.restrictTo('admin'), tourController.orderStatus);
+  
 export default router;
 
 

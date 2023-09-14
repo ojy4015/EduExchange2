@@ -18,7 +18,7 @@ export default function ProductView() {
     // hooks
     const params = useParams();
 
-    const stock = product?.maxGroupSize - product?.sold;
+    // const stock = product?.maxGroupSize - product?.sold;
 
     useEffect(() => {
         if (params?.slug) loadProduct();
@@ -53,10 +53,18 @@ export default function ProductView() {
                     <div className='card mb-3'>
 
                         <Badge.Ribbon text={`${product?.sold} sold`} color="red">
-                            <Badge.Ribbon
+                            {/* <Badge.Ribbon
                                 text={
                                     `${stock >= 1 ? `${stock} In stock` : "Out of Stock"}`}
                                 placement="start" color="green"
+                            > */}
+                            <Badge.Ribbon
+                                text={`${product?.quantity >= 1
+                                ? `${product?.quantity - product?.sold} in stock`
+                                : "Out of stock"
+                                }`}
+                                placement="start"
+                                color="green"
                             >
                                 <img
                                     className="card-img-top"
@@ -86,12 +94,19 @@ export default function ProductView() {
                             <p>
                                 <FaRegClock /> Added: {moment(product.createdAt).format('YYYY MM DD HH:mm:ss')}
                             </p>
-                            <p>
+                            {/* <p>
                                 {stock > 1 ? <FaCheck /> : <FaTimes />}{" "}
                                 {stock > 1 ? "In Stock" : "Out of Stock"}
-                            </p>
+                            </p> */}
                             <p>
+                                {product?.quantity > 0 ? <FaCheck /> : <FaTimes />}{" "}
+                                {product?.quantity > 0 ? "In Stock" : "Out of Stock"}
+                            </p>
+                            {/* <p>
                                 <FaWarehouse /> Available {stock > 0 ? stock : 0}
+                            </p> */}
+                            <p>
+                                <FaWarehouse /> Available {product?.quantity - product?.sold}
                             </p>
                             <p>
                                 <FaRocket /> Sold {product.sold}

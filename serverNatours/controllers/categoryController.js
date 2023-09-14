@@ -19,6 +19,7 @@ const deleteCategory = factory.deleteOne(Category);
 const getAllCategorys = async (req, res) => {
   try {
     const all = await Category.find({});
+    console.log("all : ", all);
     res.json(all);
   } catch (err) {
     console.log(err);

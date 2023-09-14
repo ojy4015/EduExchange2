@@ -10,24 +10,15 @@ import "antd/dist/reset.css";
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-    // <React.StrictMode>
-    //     <AuthProvider>
-    //         <SearchProvider>
-    //             <CartProvider>
-    //                 <App />
-    //             </CartProvider>
-    //         </SearchProvider>
-    //     </AuthProvider>
-    // </React.StrictMode>
-
-    <AuthProvider>
-        <SearchProvider>
-            <CartProvider>
-                <App />
-            </CartProvider>
-        </SearchProvider>
-    </AuthProvider>
-
+    <React.StrictMode>
+        <AuthProvider>
+            <SearchProvider>
+                <CartProvider>
+                    <App />
+                </CartProvider>
+            </SearchProvider>
+        </AuthProvider>
+    </React.StrictMode>
 );
 
 // If you want to start measuring performance in your app, pass a function

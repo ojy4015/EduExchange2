@@ -50,10 +50,3 @@ export default function Search() {
 
     );
 }
-
-
-////////////////////////////////////////////////////////////////////////
-// const [values, setValues] = useState({
-//     keyword: "",
-//     results: [],
-// });

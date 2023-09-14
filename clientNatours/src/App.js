@@ -17,6 +17,7 @@ import AdminProductUpdate from './pages/admin/ProductUpdate'
 import UserProfile from './pages/user/Profile';
 import ChangePassword from './pages/user/ChangePassword';
 import UserOrders from './pages/user/Orders';
+import AdminOrders from './pages/admin/Orders';
 import PrivateRoute from './components/routes/PrivateRoute';
 import AdminRoute from './components/routes/AdminRoute';
 import PageNotFound from './pages/user/PageNotFound';
@@ -30,7 +31,6 @@ import Cart from './pages/Cart';
 import ProductView from './pages/ProductView';
 import CategoriesList from './pages/CategoriesList';
 import CategoryView from './pages/CategoryView';
-import AdminOrders from './pages/admin/Orders';
 import AccountActivate from "./pages/auth/AccountActivate";
 import ForgotPassword from "./pages/auth/ForgotPassword";
 import AccessAccount from "./pages/auth/AccessAccount";

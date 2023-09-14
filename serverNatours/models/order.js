@@ -8,14 +8,16 @@ const orderSchema = new Schema(
     products: [{ type: ObjectId, ref: "Tour" }],
     payment: {},
     buyer: { type: ObjectId, ref: "User" },
+    // seller: { type: ObjectId, ref: "User" },
     status: {
       type: String,
       default: "Not processed",
       enum: [
         "Not processed",
         "Processing",
-        "Done",
-        "Cancelled",
+        "Shipped",
+        "Delivered",
+        "Cancelled"
       ],
     },
   },
