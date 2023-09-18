@@ -153,6 +153,7 @@ tourSchema.virtual('durationWeeks').get(function () {
 });
 
 // Virtual populate: connect two model(Tour, Review) together
+// keeping the reference to all the child document(review) on the parent document(tour) without persisting to the database
 tourSchema.virtual('reviews', {
   ref: 'Review',
   foreignField: 'tour',

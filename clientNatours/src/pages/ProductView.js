@@ -71,12 +71,27 @@ export default function ProductView() {
     };
 
     // load all the reviews fro one product by all users
+    // const loadReviews = async (ProductId) => {
+    //     try {
+    //         //console.log(params.slug);
+    //         const { data } = await axios.get(`/reviews/${ProductId}`);
+    //         console.log("reviews : ", data);
+    //         setReviews(data);
+    //         //console.log(data);
+    //         // loadRelated(data._id, data.category._id);
+    //         //console.log(data);
+    //     } catch (err) {
+    //         console.log(err);
+    //     }
+    // };
+
+    // load all the reviews fro one product by all users
     const loadReviews = async (ProductId) => {
         try {
             //console.log(params.slug);
-            const { data } = await axios.get(`/reviews/${ProductId}`);
-            console.log("reviews : ", data);
-            setReviews(data);
+            const { data } = await axios.get(`/tours/${ProductId}`);
+            console.log("tour : ", data);
+            setReviews(data.reviews);
             //console.log(data);
             // loadRelated(data._id, data.category._id);
             //console.log(data);
@@ -188,7 +203,7 @@ export default function ProductView() {
 
                     <div className="p-3 mt-2 mb-2 h4 bg-light"> Reviews</div>
                     <p>댓글 수 : {reviews.length}</p>
-
+                    {/* <pre>{JSON.stringify({reviews}, null, 4)}</pre> */}
                     <div className="border shadow bg-light rounded-4 mb-5">
                         <table className="table">
                             <thead>

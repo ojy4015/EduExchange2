@@ -95,7 +95,7 @@ export default function Shop() {
             <Jumbotron title="Shopping Here"
                 subTitle="Welcome to Natours Trip"
             />
-            <pre>{JSON.stringify({ checked, radio }, null, 4)}</pre>
+            {/* <pre>{JSON.stringify({ checked, radio }, null, 4)}</pre> */}
             <div className="container-fluid">
                 {/* <a href="https://easel.teacherspayteachers.com/students?code=4C2N2E&utm_campaign=direct">easel by tpt</a>
                 <br />
