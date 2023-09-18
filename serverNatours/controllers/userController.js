@@ -2,7 +2,7 @@ import User from './../models/userModel.js';
 import catchAsync from './../utils/catchAsync.js';
 import AppError from './../utils/appError.js';
 import * as factory from './handlerFactory.js';
-import Order from "../models/order.js";
+import Order from "../models/orderModel.js";
 
 // middleware function for req.params.id = req.user.id;
 export const getMe = (req, res, next) => {

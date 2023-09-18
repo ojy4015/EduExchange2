@@ -59,7 +59,7 @@ const userSchema = new mongoose.Schema(
     role: {
       type: [String],
       default: ["user"],
-      enum: ["user", "admin"],
+      enum: ["user", "guides", "admin"],
     },
     // enquiredProperties: [{ type: ObjectId, ref: "Ad" }],
     // wishlist: [{ type: ObjectId, ref: "Ad" }],

@@ -3,11 +3,12 @@ import mongoose from 'mongoose';
 const { Schema } = mongoose;
 const { ObjectId } = mongoose.Schema;
 
+// tour(reviewModel.js) => products(orderModel.js), user(reviewModel.js) => buyers(orderModel.js)
 const orderSchema = new Schema(
   {
     products: [{ type: ObjectId, ref: "Tour" }],
     payment: {},
-    buyer: { type: ObjectId, ref: "User" },
+    buyers: { type: ObjectId, ref: "User" },
     // seller: { type: ObjectId, ref: "User" },
     status: {
       type: String,

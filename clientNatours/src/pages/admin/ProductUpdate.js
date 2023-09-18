@@ -324,7 +324,7 @@ export default function AdminProductUpdate() {
     const loadProduct = async () => {
         try {
             console.log("params => ", params);
-            const { data } = await axios.get(`/tours/${params.slug}`);
+            const { data } = await axios.get(`/tours/slug/${params.slug}`);
             console.log("data in loadProduct in ProductUpdate=> ", data);
 
             // category모델이 배열인경우

@@ -5,7 +5,7 @@ import AppError from './../utils/appError.js';
 import slugify from 'slugify';
 
 // works for every model
-const deleteOne = Model => catchAsync(async (req, res, next) => {
+export const deleteOne = Model => catchAsync(async (req, res, next) => {
   const doc = await Model.findByIdAndDelete(req.params.id);
 
   if (!doc) {
@@ -21,7 +21,7 @@ const deleteOne = Model => catchAsync(async (req, res, next) => {
 });
 
 // update
-const updateOne = Model => catchAsync(async (req, res, next) => {
+export const updateOne = Model => catchAsync(async (req, res, next) => {
   // in findByIdAndUpdate, all the save middlewares do not run.
   const doc = await Model.findByIdAndUpdate(req.params.id, req.body, {
     new: true,
@@ -44,7 +44,7 @@ const updateOne = Model => catchAsync(async (req, res, next) => {
   res.json(doc);
 });
 
-const createOne = Model => catchAsync(async (req, res, next) => {
+export const createOne = Model => catchAsync(async (req, res, next) => {
   //console.log("in handler createOne: " + req.files, req.fields);
   const doc = await Model.create(req.body);
 
@@ -57,7 +57,7 @@ const createOne = Model => catchAsync(async (req, res, next) => {
   res.json(doc);
 });
 
-const getOne = (Model, popOptions) => catchAsync(async (req, res, next) => {
+export const getOne = (Model, popOptions) => catchAsync(async (req, res, next) => {
   //console.log("id in photo in getOne: ", req.params.photoId);
   let query = Model.findById(req.params.id);
   // populate step replace ids with the actual data
@@ -80,7 +80,7 @@ const getOne = (Model, popOptions) => catchAsync(async (req, res, next) => {
   });
 });
 
-const getAll = Model => catchAsync(async (req, res) => {
+export const getAll = Model => catchAsync(async (req, res) => {
   //console.log("req in getAll: "+req);
   // To allow for nested GET reviews on tour(hack)
   try {
@@ -95,5 +95,3 @@ const getAll = Model => catchAsync(async (req, res) => {
   }
   res.json(doc);
 });
-
-export {deleteOne, updateOne, createOne, getOne, getAll}

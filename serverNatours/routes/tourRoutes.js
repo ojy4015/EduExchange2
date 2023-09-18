@@ -65,17 +65,25 @@ router.route('/distances/:latlng/unit/:unit')
 
 // router.use('/:tourId/reviews', reviewRouter);
 
+// to avoid conflict with /:id, add /slug
+router
+  .route('/slug/:slug')
+  .get(tourController.read);
+////////////////////////////////////////////////////
+
+// router
+//   .route('/')
+//   .get(tourController.getAllTours)
+//   .post(authController.protect,
+//     authController.restrictTo('admin', 'lead-guide'),
+//     formidableMiddleware(),
+//     tourController.create);
+
 router
   .route('/')
   .get(tourController.getAllTours)
-  .post(authController.protect,
-    authController.restrictTo('admin', 'lead-guide'),
-    formidableMiddleware(),
+  .post(
     tourController.create);
-
-router
-  .route('/:slug')
-  .get(tourController.read);
 
 router
   .route('/:id')

@@ -5,7 +5,7 @@ import * as factory from './handlerFactory.js';
 import braintree from "braintree";
 import fs from 'fs';
 import dotenv from 'dotenv';
-import Order from '../models/order.js';
+import Order from '../models/orderModel.js';
 import * as config from "../config.js";
 import { emailTemplate } from "../helpers/email.js";
 
@@ -104,8 +104,11 @@ export const getMonthlyPlan = catchAsync(async (req, res, next) => {
 });
 
 // thanks to closure
-export const getTour = factory.getOne(Tour, { path: 'reviews' });
-export const getAllTours = factory.getAll(Tour);
+// export const getTour = factory.getOne(Tour, { path: 'reviews' });
+
+
+
+// export const getAllTours = factory.getAll(Tour);
 const createTour = factory.createOne(Tour);
 //exports.createTour = factory.create();
 export const updateTour = factory.updateOne(Tour);
@@ -183,54 +186,94 @@ export const getDistances = catchAsync(async (req, res, next) => {
 ////////////////////////////////////////////////////////////////
 
 
+// export const create = async (req, res, next) => {
+//   //console.log("in tourController: " + req.files, req.fields);
+
+//   try {
+//     const { category, name, duration, maxGroupSize, description, difficulty, ratingsAverage, ratingsQuantity, price, priceDiscount, quantity, sold, summary } = req.fields;
+//     const { photo } = req.files;
+
+//     //validation
+//     switch (true) {
+//       case !name.trim():
+//         return res.json({ error: "Name is required" });
+//       case !duration.trim():
+//         return res.json({ error: "duration is required" });
+//       case !maxGroupSize.trim():
+//         return res.json({ error: "maxGroupSize is required" });
+//       case !description.trim():
+//         return res.json({ error: "Description is required" });
+//       case !difficulty.trim():
+//         return res.json({ error: "difficulty is required" });
+//       case !ratingsAverage.trim():
+//         return res.json({ error: "ratingsAverage is required" });
+//       case !ratingsQuantity.trim():
+//         return res.json({ error: "ratingsQuantity is required" });
+//       case !price.trim():
+//         return res.json({ error: "Price is required" });
+//       case !category.trim():
+//         return res.json({ error: "Category is required" });
+//       case !priceDiscount.trim():
+//         return res.json({ error: "priceDiscount is required" });
+//       case !quantity.trim():
+//         return res.json({ error: "quantity is required" });
+//       case !sold.trim():
+//         return res.json({ error: "sold is required" });
+//       case !summary.trim():
+//         return res.json({ error: "summary is required" });
+//       //   case !shipping.trim():
+//       //     return res.json({ error: "Shipping is required" });
+//       case photo && photo.size > 1000000: //1Mbyte
+//         return res.json({ error: "Image should be less than 1mb in size" });
+//     }
+
 export const create = async (req, res, next) => {
   //console.log("in tourController: " + req.files, req.fields);
 
   try {
-    const { category, name, duration, maxGroupSize, description, difficulty, ratingsAverage, ratingsQuantity, price, priceDiscount, quantity, sold, summary } = req.fields;
-    const { photo } = req.files;
+    // const { name, duration, maxGroupSize, description, difficulty, ratingsAverage, ratingsQuantity, price, priceDiscount, quantity, sold, summary } = req.body;
 
     //validation
-    switch (true) {
-      case !name.trim():
-        return res.json({ error: "Name is required" });
-      case !duration.trim():
-        return res.json({ error: "duration is required" });
-      case !maxGroupSize.trim():
-        return res.json({ error: "maxGroupSize is required" });
-      case !description.trim():
-        return res.json({ error: "Description is required" });
-      case !difficulty.trim():
-        return res.json({ error: "difficulty is required" });
-      case !ratingsAverage.trim():
-        return res.json({ error: "ratingsAverage is required" });
-      case !ratingsQuantity.trim():
-        return res.json({ error: "ratingsQuantity is required" });
-      case !price.trim():
-        return res.json({ error: "Price is required" });
-      case !category.trim():
-        return res.json({ error: "Category is required" });
-      case !priceDiscount.trim():
-        return res.json({ error: "priceDiscount is required" });
-      case !quantity.trim():
-        return res.json({ error: "quantity is required" });
-      case !sold.trim():
-        return res.json({ error: "sold is required" });
-      case !summary.trim():
-        return res.json({ error: "summary is required" });
-      //   case !shipping.trim():
-      //     return res.json({ error: "Shipping is required" });
-      case photo && photo.size > 1000000: //1Mbyte
-        return res.json({ error: "Image should be less than 1mb in size" });
-    }
+    // switch (true) {
+    //   case !name.trim():
+    //     return res.json({ error: "Name is required" });
+    //   case !duration.trim():
+    //     return res.json({ error: "duration is required" });
+    //   case !maxGroupSize.trim():
+    //     return res.json({ error: "maxGroupSize is required" });
+    //   case !description.trim():
+    //     return res.json({ error: "Description is required" });
+    //   case !difficulty.trim():
+    //     return res.json({ error: "difficulty is required" });
+    //   case !ratingsAverage.trim():
+    //     return res.json({ error: "ratingsAverage is required" });
+    //   case !ratingsQuantity.trim():
+    //     return res.json({ error: "ratingsQuantity is required" });
+    //   case !price.trim():
+    //     return res.json({ error: "Price is required" });
+    //   case !category.trim():
+    //     return res.json({ error: "Category is required" });
+    //   case !priceDiscount.trim():
+    //     return res.json({ error: "priceDiscount is required" });
+    //   case !quantity.trim():
+    //     return res.json({ error: "quantity is required" });
+    //   case !sold.trim():
+    //     return res.json({ error: "sold is required" });
+    //   case !summary.trim():
+    //     return res.json({ error: "summary is required" });
+    //   //   case !shipping.trim():
+    //   //     return res.json({ error: "Shipping is required" });
+    //   case photo && photo.size > 1000000: //1Mbyte
+    //     return res.json({ error: "Image should be less than 1mb in size" });
+    // }
 
     // create tour
-    const tour = new Tour({ ...req.fields });
+    const tour = new Tour({ ...req.body });
 
-    if (photo) {
-      tour.photo.data = fs.readFileSync(photo.path);
-      tour.photo.contentType = photo.type;
-    }
+    // if (photo) {
+    //   tour.photo.data = fs.readFileSync(photo.path);
+    //   tour.photo.contentType = photo.type;
+    // }
 
     await tour.save();
     res.json(tour);
@@ -322,8 +365,25 @@ export const photo = catchAsync(async (req, res, next) => {
   }
 });
 
+// export const select = catchAsync(async (req, res, next) => {
 
-export const read = catchAsync(async (req, res, next) => {
+//   try {
+// console.log("Object.keys(req.params)[0] : ",Object.keys(req.params)[0]);
+//     switch(Object.keys(req.params)[0]) {
+//       case slug:
+//           read();
+//           return;
+//       case id:
+//           getTour();
+//           return;
+//       }
+//       next();
+//   } catch (err) {
+//     console.log(err);
+//   }
+// });
+
+export const read = catchAsync(async (req, res) => {
 
   try {
     //console.log("params.slug=> ", req.params.slug);
@@ -337,10 +397,47 @@ export const read = catchAsync(async (req, res, next) => {
   }
 });
 
+export const getTour = catchAsync(async (req, res) => {
+
+  // get info about guides only in the query, but no writing in the database
+  // const tour = await Tour.findById(req.params.id).populate('guides');
+
+  try {
+    // virtual populate(tour being populated with reviews)
+    const tour = await Tour.findById(req.params.id)
+      .select("-photo")
+      .populate('reviews');
+
+    res.json(tour);
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+export const getAllTours = catchAsync(async (req, res) => {
+
+  // get info about guides only in the query, but no writing in the database
+  // const tour = await Tour.findById(req.params.id).populate('guides');
+
+  try {
+    const tours = await Tour.find({})
+      .select("-photo")
+      // .populate({
+      //   path: "guides",
+      //   select: '-__v'
+      // })
+      .sort({ createdAt: -1 });
+
+    res.json(tours);
+  } catch (err) {
+    console.log(err);
+  }
+});
+
 export const filteredTours = catchAsync(async (req, res) => {
 
   try {
-    console.log("inside filteredTours");
+    // console.log("inside filteredTours");
     const { checked, radio } = req.body;
 
 
@@ -420,7 +517,7 @@ export const toursSearch = catchAsync(async (req, res) => {
 export const relatedTours = catchAsync(async (req, res) => {
   try {
     const { tourId, categoryId } = req.params;
-    console.log(tourId, categoryId);
+    // console.log(tourId, categoryId);
     const related = await Tour.find({
       category: categoryId,
       _id: { $ne: tourId },

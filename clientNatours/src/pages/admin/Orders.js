@@ -108,7 +108,7 @@ export default function AdminOrders() {
                         </td>
                         {/* <td>{o?.status}</td> */}
                         <td>{o?.buyer?.name}</td>
-                        <td>{moment(o?.createdAt).fromNow()}</td>
+                        <td>{moment(o?.createdAt).format('YYYY MM DD HH:mm:ss')}</td>
                         <td>{o?.payment?.success ? "Success" : "Failed"}</td>
                         <td>{o?.products?.length} products</td>
                       </tr>

@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 import slugify from 'slugify';
 import validator from 'validator';
+
 // only in embedd object
 // const User = require('./userModel');
 
@@ -108,6 +109,7 @@ const tourSchema = new mongoose.Schema(
     // guides: Array
 
     // reference  User Object case, only contains reference
+    // Child referencing
     guides: [
       {
         type: mongoose.Schema.ObjectId,
@@ -185,6 +187,7 @@ tourSchema.pre('save', function (next) {
 // });
 
 // QUERY MIDDLEWARE
+// this points to current query
 // tourSchema.pre('find', function(next) {
 tourSchema.pre(/^find/, function (next) {
   this.find({ secretTour: { $ne: true } });
@@ -193,11 +196,11 @@ tourSchema.pre(/^find/, function (next) {
   next();
 });
 
-// populate step replace ids with the actual data
+// populate step replace ids with the actual data, this will speed down performance
 tourSchema.pre(/^find/, function (next) {
   this.populate({
     path: 'guides',
-    select: '-__v -passwordChangedAt'
+    select: '-__v'
   });
   next();
 });
