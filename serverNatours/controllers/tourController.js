@@ -228,52 +228,54 @@ export const getDistances = catchAsync(async (req, res, next) => {
 //     }
 
 export const create = async (req, res, next) => {
-  //console.log("in tourController: " + req.files, req.fields);
+
 
   try {
-    // const { name, duration, maxGroupSize, description, difficulty, ratingsAverage, ratingsQuantity, price, priceDiscount, quantity, sold, summary } = req.body;
+    const { category, name, duration, maxGroupSize, description, difficulty, ratingsAverage, ratingsQuantity, price, priceDiscount, quantity, sold, summary } = req.fields;
+
+    const { photo } = req.files;
 
     //validation
-    // switch (true) {
-    //   case !name.trim():
-    //     return res.json({ error: "Name is required" });
-    //   case !duration.trim():
-    //     return res.json({ error: "duration is required" });
-    //   case !maxGroupSize.trim():
-    //     return res.json({ error: "maxGroupSize is required" });
-    //   case !description.trim():
-    //     return res.json({ error: "Description is required" });
-    //   case !difficulty.trim():
-    //     return res.json({ error: "difficulty is required" });
-    //   case !ratingsAverage.trim():
-    //     return res.json({ error: "ratingsAverage is required" });
-    //   case !ratingsQuantity.trim():
-    //     return res.json({ error: "ratingsQuantity is required" });
-    //   case !price.trim():
-    //     return res.json({ error: "Price is required" });
-    //   case !category.trim():
-    //     return res.json({ error: "Category is required" });
-    //   case !priceDiscount.trim():
-    //     return res.json({ error: "priceDiscount is required" });
-    //   case !quantity.trim():
-    //     return res.json({ error: "quantity is required" });
-    //   case !sold.trim():
-    //     return res.json({ error: "sold is required" });
-    //   case !summary.trim():
-    //     return res.json({ error: "summary is required" });
-    //   //   case !shipping.trim():
-    //   //     return res.json({ error: "Shipping is required" });
-    //   case photo && photo.size > 1000000: //1Mbyte
-    //     return res.json({ error: "Image should be less than 1mb in size" });
-    // }
+    switch (true) {
+      case !name.trim():
+        return res.json({ error: "Name is required" });
+      case !duration.trim():
+        return res.json({ error: "duration is required" });
+      case !maxGroupSize.trim():
+        return res.json({ error: "maxGroupSize is required" });
+      case !description.trim():
+        return res.json({ error: "Description is required" });
+      case !difficulty.trim():
+        return res.json({ error: "difficulty is required" });
+      case !ratingsAverage.trim():
+        return res.json({ error: "ratingsAverage is required" });
+      case !ratingsQuantity.trim():
+        return res.json({ error: "ratingsQuantity is required" });
+      case !price.trim():
+        return res.json({ error: "Price is required" });
+      case !category.trim():
+        return res.json({ error: "Category is required" });
+      case !priceDiscount.trim():
+        return res.json({ error: "priceDiscount is required" });
+      case !quantity.trim():
+        return res.json({ error: "quantity is required" });
+      case !sold.trim():
+        return res.json({ error: "sold is required" });
+      case !summary.trim():
+        return res.json({ error: "summary is required" });
+      //   case !shipping.trim():
+      //     return res.json({ error: "Shipping is required" });
+      case photo && photo.size > 1000000: //1Mbyte
+        return res.json({ error: "Image should be less than 1mb in size" });
+    }
 
     // create tour
-    const tour = new Tour({ ...req.body });
+    const tour = new Tour({ ...req.fields });
 
-    // if (photo) {
-    //   tour.photo.data = fs.readFileSync(photo.path);
-    //   tour.photo.contentType = photo.type;
-    // }
+    if (photo) {
+      tour.photo.data = fs.readFileSync(photo.path);
+      tour.photo.contentType = photo.type;
+    }
 
     await tour.save();
     res.json(tour);
@@ -433,6 +435,8 @@ export const getAllTours = catchAsync(async (req, res) => {
     console.log(err);
   }
 });
+
+export const getAllFeaturedTours = factory.getAll(Tour);
 
 export const filteredTours = catchAsync(async (req, res) => {
 

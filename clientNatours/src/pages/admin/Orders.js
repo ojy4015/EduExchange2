@@ -62,7 +62,7 @@ export default function AdminOrders() {
           </div>
           <div className="col-md-9">
             <div className="p-3 mt-2 mb-2 h4 bg-light"> Orders</div>
-            {/* <pre>{JSON.stringify( orders , null, 4)}</pre>*/}
+            {/* <pre>{JSON.stringify(orders, null, 4)}</pre> */}
             {orders?.map((o, index) => {
               return (
                 <div
@@ -77,6 +77,7 @@ export default function AdminOrders() {
                         <th scope="col">Buyer</th>
                         <th scope="col">Ordered</th>
                         <th scope="col">Payment</th>
+                        {/* <th scope="col">Amount</th> */}
                         <th scope="col">Quantity</th>
                       </tr>
                     </thead>
@@ -110,7 +111,9 @@ export default function AdminOrders() {
                         <td>{o?.buyer?.name}</td>
                         <td>{moment(o?.createdAt).format('YYYY MM DD HH:mm:ss')}</td>
                         <td>{o?.payment?.success ? "Success" : "Failed"}</td>
-                        <td>{o?.products?.length} products</td>
+                        {/* <td>{o?.payment?.transaction.amount}</td> */}
+                        <td>{o?.products.length}</td>
+                        {/* <td>{o?.products?.length} products</td> */}
                       </tr>
                     </tbody>
                   </table>

@@ -68,9 +68,10 @@ reviewSchema.pre(/^find/, function (next) {
 });
 
 // static method
+// Model.calcAverageRatings
 reviewSchema.statics.calcAverageRatings = async function (tourId) {
-  //console.log(tourId);
-  // this points to model and need to call aggregate on the model
+  console.log("tourId = ", tourId);
+  // this points to model and need to call aggregate on the model(Review.aggregate)
   const stats = await this.aggregate([
     {
       $match: { tour: tourId }
@@ -83,7 +84,7 @@ reviewSchema.statics.calcAverageRatings = async function (tourId) {
       }
     }
   ]);
-  //console.log("stats[0]: ",stats[0]);
+  //console.log("stats: ", stats);
 
   if (stats.length > 0) {
     // update finally(lastly)
@@ -101,9 +102,9 @@ reviewSchema.statics.calcAverageRatings = async function (tourId) {
   }
 };
 
-// middleware function
+// middleware function for create review
 reviewSchema.post('save', function () {
-  // this points to current review document
+  // this points to current review document that is currently being saved
   // this.constructor points to the model, this.constructor = Review(Model)
   this.constructor.calcAverageRatings(this.tour);
 });
@@ -117,7 +118,8 @@ reviewSchema.pre(/^findOneAnd/, async function (next) {
   // const r = await this.findOne()
   // console.log("r : ",r);
   this.r = await this.findOne();
-  //console.log("this.r : ",this.r);
+  // this.r => document
+  console.log("this.r : ", this.r);
   next();
 });
 

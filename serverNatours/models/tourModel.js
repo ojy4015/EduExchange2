@@ -33,6 +33,7 @@ const tourSchema = new mongoose.Schema(
         message: 'Difficulty is either: easy, medium, difficult'
       }
     },
+    // whenever new review is added, or deleted to tour
     ratingsAverage: {
       type: Number,
       default: 4.5,
@@ -144,7 +145,10 @@ const tourSchema = new mongoose.Schema(
   }
 );
 
+// compound index => 1: ascending order , -1: descending order
 tourSchema.index({ price: 1, ratingsAverage: -1 });
+
+// unique index
 tourSchema.index({ slug: 1 });
 tourSchema.index({ startLocation: '2dsphere' });
 

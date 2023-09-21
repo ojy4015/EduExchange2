@@ -7,7 +7,7 @@ import * as authController from './../controllers/authController.js';
 const router = express.Router();
 
 // no one can access below routes without being authentcated
-// router.use(authController.protect);
+router.use(authController.protect);
 
 // router
 //   .route('/')
@@ -24,9 +24,9 @@ const router = express.Router();
 router
   .route('/:id')
   .get(reviewController.getAllReviews)
-  .post(authController.protect, authController.restrictTo('user'), reviewController.createReview);
+  .post(authController.restrictTo('user'), reviewController.createReview)
+  .delete(authController.restrictTo('user', 'admin'), reviewController.deleteReview);
 //   .patch(authController.restrictTo('user', 'admin'), reviewController.updateReview)
-//   .delete(authController.restrictTo('user', 'admin'), reviewController.deleteReview);
 
 
 router

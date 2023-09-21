@@ -77,7 +77,7 @@ export default function UserCartSidebar() {
     return (
         <div className="col-md-4 mb-5">
             <h4>Your Cart Summary</h4>
-            Total / Address / Payment
+            현재 해외 거래만 가능하고 국내 거래는 불가능합니다!
             <hr />
             <h6>Total : {cartTotal()}</h6>
 

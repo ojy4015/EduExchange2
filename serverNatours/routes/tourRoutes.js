@@ -7,40 +7,40 @@ import formidableMiddleware from 'express-formidable';
 const router = express.Router();
 
 // for public route
-router.get('/test', (req, res)=> {
-  res.json({name: "Hyung", favoriteFood: "Rice"})
- });
+router.get('/test', (req, res) => {
+  res.json({ name: "Hyung", favoriteFood: "Rice" })
+});
 
- router
- .route('/photo/:photoId')
- .get(tourController.photo);
+router
+  .route('/photo/:photoId')
+  .get(tourController.photo);
 
- router
- .route('/filteredTours')
-   .post(tourController.filteredTours);
+router
+  .route('/filteredTours')
+  .post(tourController.filteredTours);
 
- router
- .route('/toursCount')
-   .get(tourController.toursCount);
+router
+  .route('/toursCount')
+  .get(tourController.toursCount);
 
- router
- .route('/list-tours/:page')
-   .get(tourController.listTours);
+router
+  .route('/list-tours/:page')
+  .get(tourController.listTours);
 
- router
- .route('/search/:keyword')
-   .get(tourController.toursSearch);
+router
+  .route('/search/:keyword')
+  .get(tourController.toursSearch);
 
- router
-   .route('/related-tours/:tourId/:categoryId')
-   .get(tourController.relatedTours);
+router
+  .route('/related-tours/:tourId/:categoryId')
+  .get(tourController.relatedTours);
 
 // generate braintree token
 router.get("/braintree/token", tourController.getToken);
 // finalize transaction
 router.post("/braintree/payment", authController.protect, tourController.processPayment);
 
- //////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////
 
 router
   .route('/top-5-cheap')
@@ -71,33 +71,29 @@ router
   .get(tourController.read);
 ////////////////////////////////////////////////////
 
-// router
-//   .route('/')
-//   .get(tourController.getAllTours)
-//   .post(authController.protect,
-//     authController.restrictTo('admin', 'lead-guide'),
-//     formidableMiddleware(),
-//     tourController.create);
-
 router
   .route('/')
   .get(tourController.getAllTours)
-  .post(
+  // .get(tourController.getAllFeaturedTours)
+  .post(authController.protect,
+    authController.restrictTo('admin', 'guides'),
+    formidableMiddleware(),
     tourController.create);
+
 
 router
   .route('/:id')
   .get(tourController.getTour)
   .patch(authController.protect,
-    authController.restrictTo('admin', 'lead-guide'),
+    authController.restrictTo('admin', 'guides'),
     tourController.updateTour)
   .put(authController.protect,
-    authController.restrictTo('admin', 'lead-guide'),
+    authController.restrictTo('admin', 'guides'),
     formidableMiddleware(),
     tourController.update)
   .delete(
     authController.protect,
-    authController.restrictTo('admin', 'lead-guide'),
+    authController.restrictTo('admin', 'guides'),
     tourController.deleteTour
   );
 
@@ -106,78 +102,5 @@ router
 router
   .route("/order-status/:orderId")
   .put(authController.protect, authController.restrictTo('admin'), tourController.orderStatus);
-  
+
 export default router;
-
-
-
-
-/////////////////////////////////////////////////////////////////////////////////////////
-
-// router
-//   .route('/filteredTours')
-//   .post(tourController.filteredTours);
-
-
-//   exports.filteredTours = catchAsync(async (req, res) => {
-
-//     try {
-//       console.log("inside filteredTours");
-//       const { checked, radio } = req.body;
-  
-  
-//       let args = {}; // [20, 39] radio[0]=20, radio[1]=39
-//       if (checked.length > 0) args.category = checked; // add category property to the args object
-//       if (radio.length) args.price = { $gte: radio[0], $lte: radio[1] }; // add price property to the args object
-  
-//       console.log("args => ", args);
-//       const tours = await Tour.find(args);
-//       // const products = await Product.find({
-//       //   category: ['flkjsdjs', 'skjfsljgs'],
-//       //   price: { $gte: radio[0], $lt: radio[1] }
-//       // });
-  
-  
-//       console.log("tours found in filtered tours query => ", tours.length);
-//       res.json(tours);
-   
-  
-//     } catch (err) {
-//       console.log(err);
-//     }
-//   });
-
-
-
-
-
-// router.post('/filtered-tours', (req, res)=> {
-//   res.json('post test res');
-//  });
-// router.post('/filtered-tours', async(req, res)=> {
-//   try {
-//     console.log('req    ',req.body);
-//     const { checked, radio } = req.body;
-
-//     console.log("inside filteredTours");
-
-//     let args = {}; // [20, 39] radio[0]=20, radio[1]=39
-//     if (checked.length > 0) args.category = checked; // add category property to the args object
-//     if (radio.length) args.price = { $gte: radio[0], $lte: radio[1] }; // add price property to the args object
-
-//     console.log("args => ", args);
-//     const tours = await Tour.find(args);
-//     // const products = await Product.find({
-//     //   category: ['flkjsdjs', 'skjfsljgs'],
-//     //   price: { $gte: radio[0], $lt: radio[1] }
-//     // });
-
-
-//     console.log("tours found in filtered tours query => ", tours.length);
-//     res.json(tours);
-//     next();
-
-//   } catch (err) {
-//     console.log(err);
-//   }
-//  });

@@ -58,13 +58,14 @@ export const getReviews = catchAsync(async (req, res) => {
 
 // create one review for one product per one user
 export const createReview = catchAsync(async (req, res, next) => {
+  // Allow nested routes
   const tourId = req.params.id;
   const userId = req.user.id;
 
-  console.log('tourId : ', tourId);
-  console.log('userId : ', userId);
-  console.log('review : ', req.body.review);
-  console.log('rating : ', req.body.rating);
+  // console.log('tourId : ', tourId);
+  // console.log('userId : ', userId);
+  // console.log('review : ', req.body.review);
+  // console.log('rating : ', req.body.rating);
 
   const newReview = await Review.create({
     review: req.body.review,
@@ -77,9 +78,30 @@ export const createReview = catchAsync(async (req, res, next) => {
     status: 'success',
     review: newReview
   });
+
 });
 
+//
+export const deleteReview = catchAsync(async (req, res, next) => {
+  // const review = await Review.findByIdAndDelete(req.params.id);
+  const tourId = req.params.id;
+  const userId = req.user.id;
 
+  console.log('tourId : ', tourId);
+  console.log('userId : ', userId);
+
+  const review = await Review.findOneAndDelete(
+    { tour: tourId, user: userId },
+  );
+
+  if (!review) {
+    return next(new AppError('No review found with that ID', 404));
+  }
+
+  res.json(null);
+
+
+});
 
 // thanks to closure
 // const getAllReviews = factory.getAll(Review);

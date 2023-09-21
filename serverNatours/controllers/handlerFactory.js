@@ -1,7 +1,7 @@
 
 import catchAsync from './../utils/catchAsync.js';
 import AppError from './../utils/appError.js';
-// const APIFeatures = require('./../utils/apiFeatures');
+import APIFeatures from './../utils/apiFeatures.js';
 import slugify from 'slugify';
 
 // works for every model
@@ -80,18 +80,18 @@ export const getOne = (Model, popOptions) => catchAsync(async (req, res, next) =
   });
 });
 
-export const getAll = Model => catchAsync(async (req, res) => {
-  //console.log("req in getAll: "+req);
-  // To allow for nested GET reviews on tour(hack)
-  try {
-    const tours = await Model.find({})
-      .populate("category")
-      .select("-photo")
-      .sort({ createdAt: -1 });
+export const getAll = Model => catchAsync(async (req, res, next) => {
+  const features = new APIFeatures(Model.find(), req.query)
+    .filter()
+    .sort()
+    .limitFields()
+    .paginate();
 
-    res.json(tours);
-  } catch (err) {
-    console.log(err);
-  }
-  res.json(doc);
+  // const docs = await features.query.select("-photo").explain();
+  const docs = await features.query.select("-photo");
+
+  res.json({
+    results: docs.length,
+    docs
+  });
 });

@@ -7,6 +7,7 @@ import { FaDollarSign, FaProjectDiagram, FaRegClock, FaCheck, FaTimes, FaTruckMo
 import ProductCard from '../components/cards/ProductCard';
 import { useCart } from '../context/cart';
 import toast from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
 
 
 export default function ProductView() {
@@ -25,11 +26,15 @@ export default function ProductView() {
     // review for one product of all users
     const [reviews, setReviews] = useState([]);
 
+    const [ratingsAverage, setRatingsAverage] = useState("");
+    const [ratingsQuantity, setRatingsQuantity] = useState("");
+
     // to make review input and rating input disable afrer once input has done
-    const [disable, setDisable] = useState(false);
+    // const [disable, setDisable] = useState(false);
 
     // hooks
     const params = useParams();
+    const navigate = useNavigate();
 
 
     // useEffect(() => {
@@ -90,8 +95,11 @@ export default function ProductView() {
         try {
             //console.log(params.slug);
             const { data } = await axios.get(`/tours/${ProductId}`);
-            console.log("tour : ", data);
+            console.log("tour in loadReview : ", data);
             setReviews(data.reviews);
+
+            setRatingsAverage(data.ratingsAverage);
+            setRatingsQuantity(data.ratingsQuantity);
             //console.log(data);
             // loadRelated(data._id, data.category._id);
             //console.log(data);
@@ -108,16 +116,22 @@ export default function ProductView() {
                 `/reviews/${product._id}`,
                 { review, rating }
             );
-            console.log(data);
+            //console.log(data);
+
             if (data?.error) {
                 toast.error(data.error);
                 // setLoading(false);
             } else {
 
                 toast.success('your review is saved');
+                // window.location.reload();
+                loadProduct();
+
+                setReview("");
+                setRating("");
 
                 // diable input field of review and rating for no more input
-                setDisable(true);
+                // setDisable(true);
 
                 // setLoading(false);
                 // navigate("/dashboard");
@@ -125,7 +139,43 @@ export default function ProductView() {
 
         } catch (err) {
             console.log(err);
-            toast.error('You wrote review for this item already. Review can be written only once!');
+            toast.error('You wrote review for this item already or Rating should be between 1 and 5!');
+            //   setLoading(false);
+        }
+
+    };
+
+    const handleDeleteMeSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            //   setLoading(true);
+            const { data } = await axios.delete(
+                `/reviews/${product._id}`
+            );
+            console.log(data);
+
+            if (data?.error) {
+                toast.error(data.error);
+                // setLoading(false);
+            } else {
+
+                toast.success('your review is deleted');
+
+                loadProduct();
+
+                setReview("");
+                setRating("");
+                // window.location.reload();
+                // diable input field of review and rating for no more input
+                // setDisable(true);
+
+                // setLoading(false);
+                // navigate("/dashboard");
+            }
+
+        } catch (err) {
+            console.log(err);
+            toast.error('Something wrong. try again!');
             //   setLoading(false);
         }
 
@@ -201,8 +251,45 @@ export default function ProductView() {
                         </button>
                     </div>
 
+                    <div className="p-3 mt-2 mb-2 h4 bg-light">Write Review</div>
+                    <div>
+                        <form onSubmit={handleSubmitReview}>
+
+                            <textarea
+                                className="form-control m-2 p-2"
+                                placeholder="Enter your review"
+                                autoFocus
+                                value={review}
+                                onChange={(e) => setReview(e.target.value)}
+                            // disabled={disable}
+                            />
+
+                            <input
+                                type="number"
+                                className="form-control mb-4 p-2"
+                                placeholder="Enter your rating"
+                                required
+                                autoFocus
+                                value={rating}
+                                onChange={(e) => setRating(e.target.value)}
+                            // disabled={disable}
+                            />
+                            <div className="d-flex justify-content-between">
+                                <button className="btn btn-primary" type="submit">
+                                    Register
+                                </button>
+                                <button onClick={handleDeleteMeSubmit} className="btn btn-secondary" type="submit">
+                                    Delete
+                                </button>
+
+                            </div>
+
+                        </form>
+                    </div>
+
+                    <hr />
                     <div className="p-3 mt-2 mb-2 h4 bg-light"> Reviews</div>
-                    <p>댓글 수 : {reviews.length}</p>
+                    <p>{ratingsAverage} Based on {ratingsQuantity} reviews</p>
                     {/* <pre>{JSON.stringify({reviews}, null, 4)}</pre> */}
                     <div className="border shadow bg-light rounded-4 mb-5">
                         <table className="table">
@@ -231,35 +318,7 @@ export default function ProductView() {
                         </table>
                     </div>
 
-                    <div className="p-3 mt-2 mb-2 h4 bg-light">Write Review</div>
-                    <div>
-                        <form onSubmit={handleSubmitReview}>
 
-                            <textarea
-                                className="form-control m-2 p-2"
-                                placeholder="Enter your review"
-                                autoFocus
-                                value={review}
-                                onChange={(e) => setReview(e.target.value)}
-                                disabled={disable}
-                            />
-
-                            <input
-                                type="number"
-                                className="form-control mb-4 p-2"
-                                placeholder="Enter your rating"
-                                required
-                                autoFocus
-                                value={rating}
-                                onChange={(e) => setRating(e.target.value)}
-                                disabled={disable}
-                            />
-
-                            <button className="btn btn-primary" type="submit">
-                                Register
-                            </button>
-                        </form>
-                    </div>
                 </div>
 
                 <div className="col-md-3">
