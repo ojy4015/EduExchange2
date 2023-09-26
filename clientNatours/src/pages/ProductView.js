@@ -274,22 +274,22 @@ export default function ProductView() {
                                 onChange={(e) => setRating(e.target.value)}
                             // disabled={disable}
                             />
-                            <div className="d-flex justify-content-between">
-                                <button className="btn btn-primary" type="submit">
-                                    Register
-                                </button>
-                                <button onClick={handleDeleteMeSubmit} className="btn btn-secondary" type="submit">
-                                    Delete
-                                </button>
 
-                            </div>
-
+                            <button className="btn btn-primary" type="submit">
+                                Register
+                            </button>
                         </form>
                     </div>
 
                     <hr />
                     <div className="p-3 mt-2 mb-2 h4 bg-light"> Reviews</div>
-                    <p>{ratingsAverage} Based on {ratingsQuantity} reviews</p>
+                    <div className="d-flex justify-content-end">
+                        <button onClick={handleDeleteMeSubmit} className="btn btn-secondary" type="submit">
+                            내 댓글 삭제
+                        </button>
+
+                    </div>
+                    <p>평균 평점 : {ratingsAverage} Based on {ratingsQuantity} reviews</p>
                     {/* <pre>{JSON.stringify({reviews}, null, 4)}</pre> */}
                     <div className="border shadow bg-light rounded-4 mb-5">
                         <table className="table">

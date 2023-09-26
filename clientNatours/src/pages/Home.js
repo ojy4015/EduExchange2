@@ -1,112 +1,3 @@
-// import Jumbotron from '../components/cards/Jumbotron';
-// import { useState, useEffect } from 'react';
-// import axios from 'axios';
-// import ProductCard from '../components/cards/ProductCard';
-
-// import {useAuth} from '../context/auth';
-
-// export default function Home() {
-
-//   const [auth, setAuth] = useAuth();
-
-//   // state
-//   const [products, setProducts] = useState([]);
-//   const [totalProductsNum, setTotalProductsNum] = useState(0);
-//   const [page, setPage] = useState(1); // initial page
-//   const [loading, setLoading] = useState(false);
-
-//   useEffect(() => {
-//     loadProducts();
-//     getTotal();
-//   }, []);
-
-//   useEffect(() => {
-//     if (page === 1) return;
-//     loadMore();
-//   }, [page]);
-
-//   const getTotal = async () => {
-//     try {
-//       const { data } = await axios.get("/products-count");
-//       setTotalProductsNum(data);
-//     } catch (err) {
-//       console.log(err);
-//     }
-//   };
-
-//   const loadProducts = async () => {
-//     try {
-//       const { data } = await axios.get(`/list-products/${page}`);
-//       setProducts(data);
-//     } catch (err) {
-//       console.log(err);
-//     }
-//   };
-
-//   // excute each time page change
-//   const loadMore = async () => {
-//     try {
-//       setLoading(true);
-//       const { data } = await axios.get(`/list-products/${page}`);
-//       setProducts([...products, ...data]);
-//       //console.log("products: ", products, "data ; ", data);
-//       setLoading(false);
-//     } catch (err) {
-//       console.log(err);
-//       setLoading(false);
-//     }
-//   };
-
-//   const arr = [...products];
-//   //console.log(arr);
-
-//   const sortedBySold = arr?.sort((a, b) => (a.sold < b.sold ? 1 : -1));
-//   //console.log(sortedBySold);
-
-//   return (
-//     <div>
-//       <Jumbotron title="Hello World" subTitle="Let's begin Natours Journey" />
-//       <pre>{JSON.stringify(auth, null, 4)}</pre>
-//       <div className="row">
-//         <div className="col-md-6">
-//           <h2 className="p-3 mt-2 mb-2 h4 bg-light text-center">New Arrivals</h2>
-//           <div className="row">
-//             {products?.map((p) => (
-//                 <div className="col-md-6" key={p._id}>
-//                 <ProductCard product={p}  />
-//               </div>
-//             ))}
-//           </div>
-//         </div>
-//         <div className="col-md-6">
-//           <h2 className="p-3 mt-2 mb-2 h4 bg-light text-center">Best Sellers</h2>
-//           <div className="row">
-//             {sortedBySold?.map((p) => (
-//                 <div className="col-md-6" key={p._id}>
-//                 <ProductCard product={p} />
-//               </div>
-//             ))}
-//           </div>
-//         </div>
-//       </div>
-//       <div className="container text-center p-5">
-//         {products && products.length < totalProductsNum && (
-//           <button className="btn btn-warning btn-lg col-md-6" disabled={loading} onClick={
-//             e => {
-//               e.preventDefault();
-//               setPage(page + 1);
-//             }
-//           }
-//           >
-//             {loading ? "Loading..." : "Load more"}
-//           </button>
-//         )}
-//       </div>
-
-//     </div>
-//   );
-// }
-
 ////////////////////////////////////////////////////////////////////////
 import { useAuth } from '../context/auth';
 import { useEffect, useState } from "react";
@@ -116,6 +7,8 @@ import axios from "axios";
 import type { PaginationProps } from 'antd';
 import { Pagination } from 'antd';
 // import { useAuth } from '../context/auth';
+
+import AdForm from "../components/forms/AdForm"
 
 export default function Home() {
   // context
@@ -249,7 +142,11 @@ export default function Home() {
 
       </div>
 
+      <div className='container mt-2'>
+        <AdForm action="Sell" type="House" />
+      </div>
     </div>
+
 
   );
 }

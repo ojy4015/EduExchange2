@@ -87,8 +87,8 @@ export const deleteReview = catchAsync(async (req, res, next) => {
   const tourId = req.params.id;
   const userId = req.user.id;
 
-  console.log('tourId : ', tourId);
-  console.log('userId : ', userId);
+  // console.log('tourId : ', tourId);
+  // console.log('userId : ', userId);
 
   const review = await Review.findOneAndDelete(
     { tour: tourId, user: userId },
@@ -99,8 +99,6 @@ export const deleteReview = catchAsync(async (req, res, next) => {
   }
 
   res.json(null);
-
-
 });
 
 // thanks to closure

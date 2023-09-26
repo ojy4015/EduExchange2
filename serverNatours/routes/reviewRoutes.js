@@ -25,9 +25,8 @@ router
   .route('/:id')
   .get(reviewController.getAllReviews)
   .post(authController.restrictTo('user'), reviewController.createReview)
-  .delete(authController.restrictTo('user', 'admin'), reviewController.deleteReview);
+  .delete(authController.restrictTo('user'), reviewController.deleteReview);
 //   .patch(authController.restrictTo('user', 'admin'), reviewController.updateReview)
-
 
 router
   .route('/slug/:slug')
