@@ -1,5 +1,4 @@
 ////////////////////////////////////////////////////////////////////////
-import { useAuth } from "../context/auth";
 import { useEffect, useState } from "react";
 import Jumbotron from "../components/cards/Jumbotron";
 import ProductCard from "../components/cards/ProductCard";
@@ -8,24 +7,21 @@ import type { PaginationProps } from "antd";
 import { Pagination } from "antd";
 import SearchNewForm from '../components/forms/SearchNewForm';
 
-export default function Home() {
-  // context
-  const [auth, setAuth] = useAuth();
-
-  // state
-
+export default function Buy() {
   // for realist
-  const [adsForSell, setAdsForSell] = useState();
-  const [adsForRent, setAdsForRent] = useState();
+  const [ads, setAds] = useState();
 
   useEffect(() => {
     fetchAds();
   }, []);
 
+  // { data } : { ads }
   const fetchAds = async () => {
     try {
-      const { data } = await axios.get("/tours/ads");
-      setAdsForSell(data.adsForSell);
+      const { data } = await axios.get("/tours/ads-for-sell");
+
+      // { data } : { ads }
+      setAds(data);
       // setAdsForRent(data.adsForRent);
     } catch (err) {
       console.log(err);
@@ -38,18 +34,15 @@ export default function Home() {
       <h1 className="display-1 bg-primary text-light p-5">For Sell</h1>
       <div className="container">
         <div className="row">
-          {adsForSell?.map((ad) => (
+          {ads?.map((ad) => (
             <ProductCard p={ad} key={ad._id} />
           ))}
         </div>
-      <>
-      <pre>{JSON.stringify(auth, null, 4)}</pre>
-      <pre>{JSON.stringify({ adsForSell }, null, 4)}</pre> 
-      </>
       </div>
     </div>
   );
 }
 
 ////////////////////////////////////////////////////////////////////////////
- 
+{/* <pre>{JSON.stringify(auth, null, 4)}</pre>
+<pre>{JSON.stringify({ adsForSell }, null, 4)}</pre> */}

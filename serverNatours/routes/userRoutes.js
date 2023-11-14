@@ -16,6 +16,13 @@ router.patch('/resetPassword/:token', authController.resetPassword);
 // get anyuser without logged in
 router.get('/profile/:username', authController.publicProfile);
 
+// show all agents
+router.get("/agents", userController.agents);
+// how many properties each agent created, _id: agent's id
+router.get("/agent-ad-count/:_id", userController.agentAdCount);
+// show each agent's info, username: agent's usernames
+router.get('/agent/:username', userController.agent);
+
 
 // Protect all routes after this middleware 
 router.use(authController.protect);

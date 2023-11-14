@@ -3,7 +3,7 @@ import ProductCard from '../components/cards/ProductCard';
 
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import type { PaginationProps } from 'antd';
+// import type { PaginationProps } from 'antd';
 import { Checkbox, Radio, Pagination } from 'antd';
 
 import { prices } from '../prices';
@@ -21,6 +21,10 @@ export default function Shop() {
 
     // when mounted first time
     useEffect(() => {
+        loadCategories();
+    }, []);
+    
+    useEffect(() => {
         if (!checked.length && !radio.length) loadProducts();
     }, []);
 
@@ -29,16 +33,14 @@ export default function Shop() {
         if (checked.length || radio.length) loadFilteredProducts();
     }, [checked, radio]);
 
-    useEffect(() => {
-        loadCategories();
-    }, []);
 
     const loadCategories = async () => {
         try {
             const { data } = await axios.get("/categorys");
-            console.log("data in loadCategories in Shop: ", data);
+      
+            // console.log("data in loadCategories in Shop: ", data);
             setCategories(data);
-            console.log("categories in loadProducts in Shop=> ", categories);
+
         } catch (err) {
             console.log(err);
         }
@@ -47,9 +49,9 @@ export default function Shop() {
     const loadProducts = async () => {
         try {
             const { data } = await axios.get("/tours");
-            console.log('data in loadproducts: ', data);
+            // console.log('data in loadproducts: ', data);
             setProducts(data);
-            console.log('num of products in loadproducts: ', products.length);
+
         } catch (err) {
             console.log(err);
         }
@@ -61,10 +63,10 @@ export default function Shop() {
             console.log("checked and radio : ", {checked, radio});
             const { data } = await axios.post("/tours/filteredTours", { checked, radio });
 
-            console.log("data in loadFilteredProducts in Shop=> ", data);
+            // Check if theconsole.log("data in loadFilteredProducts in Shop=> ", data);
             //console.log("inside loadFilteredProducts, filtered tours == => ", data);
             setProducts(data);
-            console.log("products in loadFilteredProducts in shop: ", products);
+    
         } catch (err) {
             console.log(err);
         }
@@ -95,7 +97,7 @@ export default function Shop() {
             <Jumbotron title="Shopping Here"
                 subTitle="Welcome to Natours Trip"
             />
-            {/* <pre>{JSON.stringify({ checked, radio }, null, 4)}</pre> */}
+            <pre>{JSON.stringify({ checked, radio }, null, 4)}</pre>
             <div className="container-fluid">
                 {/* <a href="https://easel.teacherspayteachers.com/students?code=4C2N2E&utm_campaign=direct">easel by tpt</a>
                 <br />
@@ -104,18 +106,18 @@ export default function Shop() {
 
                 <div className="row">
                     <div className="col-md-3">
-                        <h2 className="p-3 mt-2 mb-2 h4 bg-light text-center">Filter by Categories
-                        </h2>
+                        <h2 className="p-3 mt-2 mb-2 h4 bg-light text-center">Filter by Categories</h2>
                         <div className="row p-5">
                             {categories?.map((c) => (
+                                
                                 <Checkbox key={c._id} onChange={(e) => handleCheck(e.target.checked, c._id)}>
                                     {c.name}
                                 </Checkbox>
                             ))}
+                            
                         </div>
 
-                        <h2 className="p-3 mt-2 mb-2 h4 bg-light text-center">Filter by Prices
-                        </h2>
+                        <h2 className="p-3 mt-2 mb-2 h4 bg-light text-center">Filter by Prices</h2>
                         <div className="row p-5">
                             <Radio.Group onChange={(e) => setRadio(e.target.value)}>
                                 {prices?.map((p) => (
@@ -149,6 +151,7 @@ export default function Shop() {
                     </div>
                 </div>
             </div>
+            <pre>{JSON.stringify(categories, null, 4)}</pre>
         </>
     );
 }

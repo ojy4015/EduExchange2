@@ -1,7 +1,7 @@
- import { NavLink } from 'react-router-dom';
- import { useAuth } from '../../context/auth';
+import { NavLink } from 'react-router-dom';
+import { useAuth } from '../../context/auth';
 
- // Sidebar
+// Sidebar
 export default function UserMenu() {
     // context
     const [auth, setAuth] = useAuth();
@@ -25,8 +25,28 @@ export default function UserMenu() {
                         Orders
                     </NavLink>
                 </li>
+                <li >
+                    <NavLink className="list-group-item" to="/dashboard/user/product">
+                        Create product
+                    </NavLink>
+                </li>
+                <li >
+                    <NavLink className="list-group-item" to="/dashboard/user/mystore">
+                        My Store
+                    </NavLink>
+                </li>
+                <li >
+                    <NavLink className="list-group-item" to="/dashboard/user/wishlist">
+                        WishList
+                    </NavLink>
+                </li>
+                <li >
+                    <NavLink className="list-group-item" to="/dashboard/user/enquiries">
+                        Enquiries
+                    </NavLink>
+                </li>
             </ul>
         </>
     );
-  
+
 }

@@ -179,7 +179,7 @@ export default function AdminCategory() {
             // console.log('data in loadCategories: '+ data);
             setCategories(data);
 
-            console.log('categories in loadCategories: ' + categories);
+            console.log('categories in loadCategories: ', categories);
 
             // const items = data.data.data;
 
@@ -218,7 +218,7 @@ export default function AdminCategory() {
         try {
             const { data } = await axios.post("/categorys", { name });
             
-            console.log("doc in category: ", data);
+            // console.log("doc in category: ", data);
             if (data?.error) {
                 toast.error(data.error);
             } else {

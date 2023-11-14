@@ -22,35 +22,38 @@ export default function ProductCardHorizontal({ p, remove = true }) {
       <div>
         <div className="card-horizontal">
           <div className="img-square-wrapper">
-            <img src={`${process.env.REACT_APP_API}/tours/photo/${p._id}`}
-            alt={p.name} />
+            <img
+              src={p?.photos?.[0].Location}
+              alt={`${p?.type}-${p?.address}-${p?.action}-${p?.price}`}
+              style={{ height: "200px", objectFit: "cover" }}
+            />
           </div>
           <div className="card-body">
             <h4 className="card-title">{p.name}</h4>
-            <p className="card-text">      
+            <p className="card-text">
               {
                 (p?.description?.length > 160)
                   ? `${p?.description?.substring(0, 160)}...`
                   : `${p?.description?.substring(0, 160)}`
-              }       
+              }
             </p>
             <h4 className="fw-bold">
-            {p?.price?.toLocaleString("ko", {
-              style: "currency",
-              currency: "KRW",
-            })}
-        </h4>
+              {p?.price?.toLocaleString("ko", {
+                style: "currency",
+                currency: "KRW",
+              })}
+            </h4>
           </div>
         </div>
         <div className="card-footer d-flex justify-content-between">
           <small className="text-muted">Listed {moment(p.createdAt).format('YYYY MM DD HH:mm')}</small>
           {remove && (
-                  <p className="text-danger mb-2 pointer"
-                      onClick={() => removeFromCart(p._id)}
-                  >
-                      Remove
-                  </p>
-              )
+            <p className="text-danger mb-2 pointer"
+              onClick={() => removeFromCart(p._id)}
+            >
+              Remove
+            </p>
+          )
           }
         </div>
       </div>

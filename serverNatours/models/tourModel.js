@@ -7,135 +7,99 @@ import validator from 'validator';
 
 const tourSchema = new mongoose.Schema(
   {
+    /////////////////// for realist only /////////////////////
+    photos: [{}],
+    // objects address
+    address: { type: String, maxLength: 255, required: true },
+    bedrooms: Number,
+    bathrooms: Number,
+    landsize: String,
+    carpark: Number,
+    location: {
+      // GeoJSON
+      type: {
+        type: String,
+        enum: ['Point'],
+        default: 'Point'
+      },
+      coordinates: {
+        type: [Number],
+        //  longitude(경도)], [latitude(위도)
+        default: [126.977966, 37.566536]
+      }
+    },
+
+    postedBy: { type: mongoose.Schema.ObjectId, ref: 'User' },
+
+    // sold for realist
+    isSold: { type: Boolean, default: false },
+    googleMap: {},
+    // type: house, land
+    type: {
+      type: String,
+      default: 'Other'
+    },
+    // action: Sell or Rent
+    action: {
+      type: String,
+      default: 'Sell'
+    },
+    views: {
+      type: Number,
+      default: 0
+    },
+
+    ////////////// common for both  tours and realist ///////////////
+    // title for realist
     name: {
       type: String,
       required: [true, 'A tour must have a name'],
       unique: true,
       trim: true,
       maxlength: [40, 'A tour name must have less or equal then 40 characters'],
-      minlength: [10, 'A tour name must have more or equal then 10 characters'],
+      minlength: [10, 'A tour name must have more or equal then 10 characters']
       // validate: [validator.isAlpha, 'Tour name must only contain characters']
     },
-    slug: String,
-    duration: {
-      type: Number,
-      required: [true, 'A tour must have a duration']
-    },
-    maxGroupSize: {
-      type: Number,
-      required: [true, 'A tour must have a group size']
-    },
-    difficulty: {
+    slug: {
       type: String,
-      required: [true, 'A tour must have a difficulty'],
-      enum: {
-        values: ['easy', 'medium', 'difficult'],
-        message: 'Difficulty is either: easy, medium, difficult'
-      }
-    },
-    // whenever new review is added, or deleted to tour
-    ratingsAverage: {
-      type: Number,
-      default: 4.5,
-      min: [1, 'Rating must be above 1.0'],
-      max: [5, 'Rating must be below 5.0'],
-      set: val => Math.round(val * 10) / 10  // 4.666, 46.666, 47, 4.7
-    },
-    ratingsQuantity: {
-      type: Number,
-      default: 0
+      lowercase: true,
+      unique: true
     },
     price: {
       type: Number,
       required: [true, 'A tour must have a price']
     },
-    priceDiscount: {
-      type: Number,
-      validate: {
-        validator: function (val) {
-          // this only points to current doc on NEW document creation
-          return val < this.price;
-        },
-        message: 'Discount price (${VALUE}) should be below regular price'
-      }
-    },
-    summary: {
-      type: {},
-      trim: true,
-      required: [true, 'A tour must have a summary']
-    },
     description: {
       type: {},
       trim: true
     },
-    imageCover: {
-      type: String,
-      //required: [true, 'A tour must have a cover image']
-    },
-    images: [String],
-    startDates: [Date],
-    // secretTour: {
-    //   type: Boolean,
-    //   default: false
-    // },
-    // // embedded object
-    // startLocation: {
-    //   // GeoJSON
-    //   type: {
-    //     type: String,
-    //     default: 'Point',
-    //     enum: ['Point']
-    //   },
-    //   //longitude(경도), latitude(위도), (In googlemaps latitude, lognitude)
-    //   coordinates: [Number],
-    //   address: String,
-    //   description: String
-    // },
-    // // new document embedded in Parent document
-    // locations: [
-    //   {
-    //     // GeoJSON
-    //     type: {
-    //       type: String,
-    //       default: 'Point',
-    //       enum: ['Point']
-    //     },
-    //     //longitude(경도), latitude(위도), (In googlemaps latitude, lognitude)
-    //     coordinates: [Number],
-    //     address: String,
-    //     day: Number
-    //   }
-    // ],
-    // embedd case
-    // guides: Array
 
-    // reference  User Object case, only contains reference
-    // Child referencing
+    ///////////////////////////// for tours only///////////
+    ratingsAverage: {
+      type: Number,
+      default: 4.5,
+      min: [1, 'Rating must be above 1.0'],
+      max: [5, 'Rating must be below 5.0'],
+      set: val => Math.round(val * 10) / 10 // 4.666, 46.666, 47, 4.7
+    },
+    ratingsQuantity: {
+      type: Number,
+      default: 0
+    },
     guides: [
       {
         type: mongoose.Schema.ObjectId,
-        ref: "User"
+        ref: 'User'
       }
     ],
     // category is not array but object
-    category: {
-      type: mongoose.Schema.ObjectId,
-      ref: "Category"
-    },
-    // category: {
-    //     type: mongoose.Schema.ObjectId,
-    //     ref: "Category"
-    //   },
-    photo: {
-      data: Buffer,
-      contentType: String,
-    },
+    categoryIn: { type: mongoose.Schema.ObjectId, ref: 'Category' },
     quantity: {
-      type: Number,
+      type: Number
     },
     sold: {
       type: Number,
-      default: 0,
+      default: 0
     }
   },
   {
@@ -150,7 +114,8 @@ tourSchema.index({ price: 1, ratingsAverage: -1 });
 
 // unique index
 tourSchema.index({ slug: 1 });
-tourSchema.index({ startLocation: '2dsphere' });
+// tourSchema.index({ startLocation: '2dsphere' });
+tourSchema.index({ location: '2dsphere' });
 
 tourSchema.virtual('durationWeeks').get(function () {
   return this.duration / 7;
@@ -165,10 +130,11 @@ tourSchema.virtual('reviews', {
 });
 
 // DOCUMENT MIDDLEWARE: runs before .save() and .create() not for update()
-tourSchema.pre('save', function (next) {
-  this.slug = slugify(this.name, { lower: true });
-  next();
-});
+// tourSchema.pre('save', function (next) {
+//   this.slug = slugify(this.name, { lower: true });
+//   // slug: slugify(`${req.body.ad.type}-${req.body.ad.address}-${req.body.ad.price}-${nanoid(6)}`)
+//   next();
+// });
 
 // DOCUMENT MIDDLEWARE: runs before .save() and .create() not for update()
 // embedding(not good) : overwrite simple array of ID with an array of user documents
@@ -178,8 +144,6 @@ tourSchema.pre('save', function (next) {
 
 //   next();
 // });
-
-
 
 // tourSchema.pre('save', function(next) {
 //   console.log('Will save document...');
@@ -222,6 +186,9 @@ tourSchema.post(/^find/, function (docs, next) {
 //   console.log(this.pipeline());
 //   next();
 // });
+
+// allow to find places based on address by using $near
+// tourSchema.index({ location: "2dshpere" });
 
 const Tour = mongoose.model('Tour', tourSchema);
 

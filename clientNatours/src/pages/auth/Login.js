@@ -7,7 +7,7 @@ import { useNavigate, useLocation, Link } from "react-router-dom";
 
 export default function Login() {
   // state
-  const [email, setEmail] = useState("ojy401@kakao.com");
+  const [email, setEmail] = useState("ojy401@naver.com");
   const [password, setPassword] = useState("test1234");
   const [passwordConfirm, setPasswordConfirm] = useState("");
 

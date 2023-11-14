@@ -1,4 +1,5 @@
 import User from './../models/userModel.js';
+import Tour from './../models/tourModel.js';
 import catchAsync from './../utils/catchAsync.js';
 import AppError from './../utils/appError.js';
 import * as factory from './handlerFactory.js';
@@ -55,4 +56,41 @@ export const getAllUsers = factory.getAll(User);
 
 // thanks to closure, only admin can delete user
 export const deleteUser = factory.deleteOne(User);
+
+// all agents
+export const agents = async (req, res) => {
+  try {
+    const agents = await User.find({ role: 'Seller' }).select('-password -role -enquiredProperties -wishlist -photo.key -photo.Key -photo.Bucket');
+
+    res.json(agents);
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+// all properties each agent created: _id: agent's id
+export const agentAdCount = async (req, res) => {
+  try {
+    const tours = await Tour.find({ postedBy: req.params._id }).select("_id");
+    res.json(tours);
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+// show each agent's info, username: agent's usernames
+export const agent = async (req, res) => {
+  try {
+    // agent(seller)
+    const user = await User.findOne({ username: req.params.username }).select('-password -role -enquiredProperties -wishlist -photo.key -photo.Key -photo.Bucket');
+
+    // all the tours created by this agent(seller)
+    const tours = await Tour.find({ postedBy: user._id }).select(
+      "-photos.key -photos.Key -photos.ETag -photos.Bucket -location -googleMap"
+    );
+    res.json({ user, tours });
+  } catch (err) {
+    console.log(err);
+  }
+}
 

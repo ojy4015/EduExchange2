@@ -1,6 +1,6 @@
 import { useAuth } from "../../context/auth";
 import Jumbotron from "../../components/cards/Jumbotron";
-import AdminMenu from "../../components/nav/AdminMenu";
+import UserMenu from "../../components/nav/UserMenu";
 
 import { useState, useEffect } from "react";
 import axios from "axios";
@@ -35,7 +35,7 @@ function onSearch(val) {
   console.log("search:", val);
 }
 
-export default function AdminProduct({ action, type }) {
+export default function UserProduct({ action, type }) {
   // context
   const [auth, setAuth] = useAuth();
   // state
@@ -87,14 +87,30 @@ export default function AdminProduct({ action, type }) {
         ad,
         category  // category id
       });
-      console.log("ad create response => ", data);
+      // data contains {ad, user, cateogoryId}
+      //console.log("ad create response => ", data);
       if (data?.error) {
         toast.error(data.error);
         setAd({ ...ad, loading: false });
       } else {
+        // data contains {ad, user, categoryId}
+        // update user in context (!seller)
+        setAuth({ ...auth, user: data.user });
+
+        // update user in local storage (!seller)
+        const fromLS = JSON.parse(localStorage.getItem("auth"));
+
+        fromLS.user = data.user;
+        localStorage.setItem("auth", JSON.stringify(fromLS));
+
         toast.success("Ad created successfully");
         setAd({ ...ad, loading: false });
-        navigate("/dashboard/admin")
+
+        //it doesn't reload page
+        // navigate("/dashboard/user")
+
+        // reload page on redirect
+        window.location.href = "/dashboard/user/mystore";
       }
     } catch (err) {
       console.log(err);
@@ -106,13 +122,13 @@ export default function AdminProduct({ action, type }) {
     <>
       <Jumbotron
         title={`Hello ${auth?.user?.name}`}
-        subTitle="Admin Dashboard"
+        subTitle="User Dashboard"
       />
 
       <div className="container-fluid">
         <div className="row">
           <div className="col-md-3">
-            <AdminMenu />
+            <UserMenu />
           </div>
 
           <div className="col-md-9">

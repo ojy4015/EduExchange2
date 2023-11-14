@@ -1,6 +1,23 @@
 
 import axios from 'axios';
-import { useState, useEffect } from 'react';
+
+// import { useSearch } from "../../context/search";
+
+// export default function SearchForm({ action, type }) {
+//     // context
+//     const [search, setSearch] = useSearch();
+
+
+
+//     return (
+//         <>
+//             search form
+//             {JSON.stringify(search)};
+//         </>
+//     )
+// }
+
+
 import { useSearch } from '../../context/search';
 import { useNavigate } from 'react-router-dom';
 
@@ -19,7 +36,7 @@ export default function Search() {
         try {
             //console.log('keyword : ', keyword);
             const { data } = await axios.get(`/tours/search/${values?.keyword}`);
-            console.log(data);
+            //console.log(data);
 
             setValues({
                 ...values, results: data,

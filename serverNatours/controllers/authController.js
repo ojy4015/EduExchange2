@@ -180,7 +180,8 @@ export const protect = catchAsync(async (req, res, next) => {
   // GRANT ACCESS TO PROTECTED ROUTE
   req.user = currentUser;
 
-  // console.log("req.user._id: ", req.user._id);
+  // both are ok
+  // console.log("req.user._id: ", req.user._id); 
   // console.log("req.user.id: ", req.user.id);
 
   next();
@@ -353,16 +354,11 @@ export const updatePassword = catchAsync(async (req, res, next) => {
 // update name and address
 export const updateProfile = async (req, res) => {
   try {
-    // phone, photo can be modified
-    const { name, address } = req.body;
+
     const user = await User.findById(req.user._id);
 
     const updated = await User.findByIdAndUpdate(
-      req.user._id,
-      {
-        name: name || user.name, // user.name is existing name
-        address: address || user.address,
-      },
+      req.user._id, req.body,
       {
         new: true,
         runValidators: true

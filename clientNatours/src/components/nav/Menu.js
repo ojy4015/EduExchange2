@@ -3,6 +3,7 @@ import { useAuth } from '../../context/auth';
 import toast from 'react-hot-toast';
 import { useNavigate } from "react-router-dom"
 import Search from '../forms/Search';
+import SearchNew from '../forms/SearchNewForm';
 import useCategory from '../../hooks/useCategory';
 import { useCart } from '../../context/cart';
 import { Badge } from 'antd';
@@ -38,7 +39,19 @@ export default function Menu() {
           <NavLink className="nav-link" aria-current="page" to="/">HOME</NavLink>
         </li>
         <li className="nav-item">
+          <NavLink className="nav-link" aria-current="page" to="/searchnew">SearchNew</NavLink>
+        </li>
+        <li className="nav-item">
+          <NavLink className="nav-link" aria-current="page" to="/buy">BUY</NavLink>
+        </li>
+        <li className="nav-item">
+          <NavLink className="nav-link" aria-current="page" to="/rent">RENT</NavLink>
+        </li>
+        <li className="nav-item">
           <NavLink className="nav-link" aria-current="page" to="/shop">SHOP</NavLink>
+        </li>
+        <li className="nav-item">
+          <NavLink className="nav-link" aria-current="page" to="/agents">Agents</NavLink>
         </li>
 
         <div className="dropdown">
@@ -90,10 +103,10 @@ export default function Menu() {
           </Badge>
         </li>
 
-        { !loggedIn ? (
+        {!loggedIn ? (
           <>
-          <li className="nav-item">
-            <NavLink className="nav-link" to="/login">LOGIN</NavLink>
+            <li className="nav-item">
+              <NavLink className="nav-link" to="/login">LOGIN</NavLink>
             </li>
             <li className="nav-item">
               <NavLink className="nav-link" to="/register">REGISTER</NavLink>
@@ -101,7 +114,7 @@ export default function Menu() {
           </>
         ) : ("")}
 
-        { loggedIn ? (
+        {loggedIn ? (
           <div className="dropdown">
             <li>
               <a
@@ -114,7 +127,7 @@ export default function Menu() {
                 <li>
                   <NavLink
                     className="nav-link"
-                    to={`/dashboard/${auth?.user?.role[0] === 'admin' ? "admin" : "user"}`}           
+                    to={`/dashboard/${auth?.user?.role[0] === 'admin' ? "admin" : "user"}`}
                   >
                     Dashboard
                   </NavLink>

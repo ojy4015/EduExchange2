@@ -7,9 +7,34 @@ import formidableMiddleware from 'express-formidable';
 const router = express.Router();
 
 // for public route
+router.get("/ads", tourController.ads);
+router.get("/ads-for-sell", tourController.adsForSell);
+router.get("/ads-for-rent", tourController.adsForRent);
+
+// searchNew
+router
+  .get("/searchNew", tourController.searchNew);
+
+// display all the tours made by one seller
+router.get("/user-tours/:page", authController.protect, tourController.userTours);
+
 router.get('/test', (req, res) => {
   res.json({ name: "Hyung", favoriteFood: "Rice" })
 });
+
+// currently logged in user's wishlist
+router.get("/wishlist/:page", authController.protect, tourController.wishlist);
+router.post("/wishlist", authController.protect, tourController.addToWishlist);
+router.delete("/wishlist/:productId", authController.protect, tourController.removeFromWishlist);
+
+// currently logged in user's enquiries
+router.get("/enquiries/:page", authController.protect, tourController.enquiries);
+router.post("/enquiries", authController.protect, tourController.addToEnquiries);
+// no meaning because can't cancel sended email
+router.delete("/enquiries/:productId", authController.protect, tourController.removeFromEnquiries);
+
+
+
 
 router
   .route('/photo/:photoId')
@@ -30,6 +55,8 @@ router
 router
   .route('/search/:keyword')
   .get(tourController.toursSearch);
+
+
 
 router
   .route('/related-tours/:tourId/:categoryId')
@@ -74,11 +101,11 @@ router
 router
   .route('/')
   .get(tourController.getAllTours)
-  // .get(tourController.getAllFeaturedTours)
-  .post(authController.protect,
-    authController.restrictTo('admin', 'guides'),
-    formidableMiddleware(),
-    tourController.create);
+  .get(tourController.getAllFeaturedTours)
+// .post(authController.protect,
+//   authController.restrictTo('admin', 'guides'),
+//   formidableMiddleware(),
+//   tourController.create);
 
 
 router
@@ -87,14 +114,19 @@ router
   .patch(authController.protect,
     authController.restrictTo('admin', 'guides'),
     tourController.updateTour)
-  .put(authController.protect,
-    authController.restrictTo('admin', 'guides'),
-    formidableMiddleware(),
-    tourController.update)
+  // .put(authController.protect,
+  //   authController.restrictTo('admin', 'guides'),
+  //   formidableMiddleware(),
+  //   tourController.update)
+  .put(authController.protect, tourController.update)
+  // .delete(
+  //   authController.protect,
+  //   authController.restrictTo('admin', 'guides'),
+  //   tourController.deleteTour
+  // );
   .delete(
     authController.protect,
-    authController.restrictTo('admin', 'guides'),
-    tourController.deleteTour
+    tourController.remove
   );
 
 // router.use('/:tourId/reviews', reviewRouter);
@@ -102,5 +134,14 @@ router
 router
   .route("/order-status/:orderId")
   .put(authController.protect, authController.restrictTo('admin'), tourController.orderStatus);
+
+// for realist
+router.post("/upload-image", authController.protect, tourController.uploadImage);
+router.post("/remove-image", authController.protect, tourController.removeImage);
+router.post("/ad", authController.protect, tourController.create);
+router.post("/contact-seller", authController.protect, tourController.contactSeller);
+
+
+
 
 export default router;

@@ -7,15 +7,18 @@ import { AuthProvider } from './context/auth';
 import { SearchProvider } from './context/search';
 import { CartProvider } from './context/cart';
 import "antd/dist/reset.css";
+import { SearchNewProvider } from './context/searchNew';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
     <React.StrictMode>
         <AuthProvider>
             <SearchProvider>
-                <CartProvider>
-                    <App />
-                </CartProvider>
+                <SearchNewProvider>
+                    <CartProvider>
+                        <App />
+                    </CartProvider>
+                </SearchNewProvider>
             </SearchProvider>
         </AuthProvider>
     </React.StrictMode>

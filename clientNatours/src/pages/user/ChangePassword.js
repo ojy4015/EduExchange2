@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useAuth } from '../../context/auth';
+// import { useAuth } from '../../context/auth';
 import Jumbotron from '../../components/cards/Jumbotron';
 import UserMenu from '../../components/nav/UserMenu';
 import axios from 'axios';
@@ -8,56 +8,38 @@ import { useNavigate, useLocation } from "react-router-dom";
 
 export default function ChangePassword() {
     // context
-    const [auth, setAuth] = useAuth();
+    // const [auth, setAuth] = useAuth();
 
     // // state
-    // const [name, setName] = useState("");
-    // const [email, setEmail] = useState("");
     const [currentPassword, setCurrentPassword] = useState("");
     const [newPassword, setNewPassword] = useState("");
     const [confirmNewPassword, setConfirmNewPassword] = useState("");
-    // const [address, setAddress] = useState("");
+    const [loading, setLoading] = useState(false);
 
-    // // hook
-    // const navigate = useNavigate();
-    // const location = useLocation();
-
-    // //console.log("location => ", location);
-
-    // useEffect(() => {
-    //     if (auth?.user) {
-    //         const { name, email, address } = auth.user;
-    //         setName(name);
-    //         setEmail(email);
-    //         setAddress(address);
-    //     }
-    // }, [auth?.user]);
 
     // update password
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
+            setLoading(true);
             const { data } = await axios.patch(`/users/updateMyPassword`,
                 { currentPassword, newPassword, confirmNewPassword }
             );
 
-            //console.log('data in changing password= ', data);
-
             // something worong
             if (data?.error) {
                 console.log(data.error);
+                setLoading(false);
             } else {
-                localStorage.setItem("auth", JSON.stringify(data));
-                setAuth({ ...auth, token: data.token, user: data.user });
+                // localStorage.setItem("auth", JSON.stringify(data));
+                // setAuth({ ...auth, token: data.token, user: data.user });
 
-
+                setLoading(false);
                 toast.success("password changeing successful");
-                //navigate(location.state || `/dashboard/${data?.user?.role === 'admin' ? "admin" : "user"}`);
-                //navigate(location.state || "/dashboard");
-
             }
         } catch (err) {
             console.log(err);
+            setLoading(false);
             toast.error('password changing failed. Try again.');
         }
     };

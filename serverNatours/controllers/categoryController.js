@@ -9,17 +9,17 @@ import * as factory from './handlerFactory.js';
 
 
 // thanks to closure
-const getCategory = factory.getOne(Category, { path: 'reviews' });
+export const getCategory = factory.getOne(Category, { path: 'reviews' });
 //const getAllCategorys = factory.getAll(Category);
-const createCategory = factory.createOne(Category);
-const updateCategory = factory.updateOne(Category);
-const deleteCategory = factory.deleteOne(Category);
+export const createCategory = factory.createOne(Category);
+export const updateCategory = factory.updateOne(Category);
+export const deleteCategory = factory.deleteOne(Category);
 
 
-const getAllCategorys = async (req, res) => {
+export const getAllCategorys = async (req, res) => {
   try {
     const all = await Category.find({});
-    console.log("all : ", all);
+    // console.log("all : ", all);
     res.json(all);
   } catch (err) {
     console.log(err);
@@ -27,10 +27,11 @@ const getAllCategorys = async (req, res) => {
   }
 };
 
-const toursByCategory = async (req, res) => {
+export const toursByCategory = async (req, res) => {
   try {
     const category = await Category.findOne({ slug: req.params.slug });
-    const tours = await Tour.find({ category }).populate('category');
+
+    const tours = await Tour.find({ categoryIn: category }).populate('categoryIn');
 
     res.json({
       category,
@@ -41,8 +42,6 @@ const toursByCategory = async (req, res) => {
     return res.status(400).json(err.message);
   }
 };
-
-export {getCategory, createCategory, updateCategory, deleteCategory, getAllCategorys, toursByCategory}
 
 
 
